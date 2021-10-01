@@ -13,7 +13,7 @@ class Strip {
 
     this.shape = new THREE.Shape();
     const mLoader = new THREE.TextureLoader();
-    this.texture = mLoader.load('../assets/dolomita.jpg', (texture) => {
+    this.texture = mLoader.load('./assets/dolomita.jpg', (texture) => {
       const imageAspect = texture.image.width / texture.image.height;
 
       const repeatX = 1 / this.width;
