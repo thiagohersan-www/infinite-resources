@@ -2,7 +2,7 @@ import * as THREE from './three/three.module.js';
 import { Strip } from './Strip.js';
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 300, 600);
+const camera = new THREE.PerspectiveCamera(150, window.innerWidth / window.innerHeight, 1, 200);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 
 window.addEventListener('resize', () => {
@@ -15,7 +15,7 @@ window.addEventListener('resize', () => {
 });
 
 scene.background = new THREE.Color(0xffffff);
-camera.position.set(0, 0, 530);
+camera.position.set(0, 0, 110);
 document.body.appendChild(renderer.domElement);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
