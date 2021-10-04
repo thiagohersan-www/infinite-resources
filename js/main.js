@@ -24,7 +24,7 @@ const NSTRIPS = 8;
 const STRIP_HEIGHT = window.innerHeight / NSTRIPS;
 
 for(let i = 0; i < NSTRIPS; i++) {
-  const mS = new Strip(window.innerWidth, STRIP_HEIGHT, i);
+  const mS = new Strip(window.innerWidth, 0.9 * STRIP_HEIGHT, i);
   mS.mesh.position.set(-window.innerWidth / 2,
                        -window.innerHeight / 2 + i * STRIP_HEIGHT);
   scene.add(mS.mesh);  
