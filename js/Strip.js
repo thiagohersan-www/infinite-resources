@@ -17,7 +17,8 @@ class Strip {
     const mLoader = new THREE.TextureLoader();
 
     // TODO: map yidx -> texture
-    this.texture = mLoader.load('./assets/dolomita.jpg', (texture) => {
+    const tFilename = `./assets/texture0${Math.floor(6 * Math.random())}.jpg`;
+    this.texture = mLoader.load(tFilename, (texture) => {
       const shape = {
         width: this.width,
         height: ((2 * AMPLITUDE + 1) * this.height)
