@@ -3,10 +3,10 @@ import * as THREE from './three/three.module.js';
 
 window.msn = new SimplexNoise();
 const NOISE = new SimplexNoise('seed');
-const NUM_POINTS_X = 100;
-const DIVERSITY_X = 200;
-const DIVERSITY_Y = 500;
-const AMPLITUDE = .5;
+const NUM_POINTS_X = 100.0;
+const DIVERSITY_X = 160.0;
+const DIVERSITY_Y = 10.0;
+const AMPLITUDE = 1.000005;
 
 class Strip {
   constructor(width, height, yidx) {
@@ -18,16 +18,23 @@ class Strip {
 
     // TODO: map yidx -> texture
     this.texture = mLoader.load('./assets/dolomita.jpg', (texture) => {
-      // TODO: deal with cases when imageAspect < shapeAspect
-      const shapeAspect = this.width / this.height;
+      const shape = {
+        width: this.width,
+        height: ((2 * AMPLITUDE + 1) * this.height)
+      };
+
+      const shapeAspect = shape.width / shape.height;
       const imageAspect = texture.image.width / texture.image.height;
 
-      const repeatX = 1 / this.width;
-      const repeatY = imageAspect / this.width;
+      shape.width = Math.max(shape.width, shape.height * imageAspect);
+      shape.height = shape.width / shapeAspect;
+
+      const repeatX = 1 / shape.width;
+      const repeatY = imageAspect / shape.width;
       texture.repeat.set(repeatX, repeatY);
 
-      const offsetX = 0;
-      const imageHeightInShapeUnits = this.width / imageAspect;
+      const imageHeightInShapeUnits = shape.width / imageAspect;
+      const offsetX = repeatX * 0.5 * (shape.width - this.width);
       const offsetY = repeatY * 0.5 * (imageHeightInShapeUnits - this.height);
       texture.offset.set(offsetX, offsetY);
     });
@@ -46,7 +53,7 @@ class Strip {
     for (let i = 0; i <= NUM_POINTS_X; i++) {
       const x = this.width - i * deltaX;
       const y_noise = NOISE.noise2D(x / DIVERSITY_X, (yidx + 1) / DIVERSITY_Y);
-      const y = this.height + this.height * AMPLITUDE * y_noise;
+      const y = this.height * (1 + AMPLITUDE * y_noise);
       this.shape.lineTo(x, y);
     }
     this.shape.lineTo(0, 0);

@@ -23,8 +23,8 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 const NSTRIPS = 8;
 const STRIP_HEIGHT = window.innerHeight / NSTRIPS;
 
-for(let i = 0; i < NSTRIPS; i++) {
-  const mS = new Strip(window.innerWidth, 0.9 * STRIP_HEIGHT, i);
+for(let i = -1; i <= NSTRIPS; i++) {
+  const mS = new Strip(window.innerWidth, 0.95 * STRIP_HEIGHT, i);
   mS.mesh.position.set(-window.innerWidth / 2,
                        -window.innerHeight / 2 + i * STRIP_HEIGHT);
   scene.add(mS.mesh);  
@@ -35,5 +35,3 @@ renderer.render(scene, camera);
 window.addEventListener('click', () => {
   renderer.render(scene, camera);
 });
-
-window.renderer = renderer;
