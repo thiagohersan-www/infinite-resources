@@ -5,6 +5,10 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(150, window.innerWidth / window.innerHeight, 1, 200);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 
+function clamp(num, min, max) {
+  return Math.min(Math.max(num, min), max);
+}
+
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
@@ -23,6 +27,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 const NSTRIPS_TOTAL = 100;
 const NSTRIPS_ONSCREEN = 8;
 const STRIP_HEIGHT = window.innerHeight / NSTRIPS_ONSCREEN;
+const MAX_DEPTH = -(NSTRIPS_TOTAL - 1) * STRIP_HEIGHT;
 
 for(let i = -NSTRIPS_TOTAL; i <= NSTRIPS_ONSCREEN; i++) {
   const mS = new Strip(window.innerWidth, 0.9999 * STRIP_HEIGHT, i);
@@ -31,15 +36,13 @@ for(let i = -NSTRIPS_TOTAL; i <= NSTRIPS_ONSCREEN; i++) {
   scene.add(mS.mesh);  
 }
 
-window.addEventListener('click', () => {
-  renderer.render(scene, camera);
+window.addEventListener('wheel', (event) => {
+  camera.position.set(camera.position.x,
+                      clamp(camera.position.y - event.deltaY, MAX_DEPTH, 0),
+                      camera.position.z);
 });
 
-let cy = 0;
 function render() {
-  cy -= 0.6666;
-  cy = Math.max(cy, -(NSTRIPS_TOTAL - 1) * STRIP_HEIGHT);
-  camera.position.set(0, cy, 110);
   renderer.render(scene, camera);
   requestAnimationFrame(render);
 }
