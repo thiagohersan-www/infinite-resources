@@ -36,37 +36,54 @@ for(let i = -NSTRIPS_TOTAL; i <= NSTRIPS_ONSCREEN; i++) {
   scene.add(mS.mesh);  
 }
 
-let startY = 0;
-let startMillis = 0;
-let lastY = 0;
-let velocityY = 0;
-const SCROLL_DAMPENING = 0.9;
+
+const mTouch = {
+  start: {
+    x: 0,
+    y: 0,
+    t: 0
+  },
+  previous: {
+    x: 0,
+    y: 0
+  },
+  velocity: {
+    x: 0,
+    y: 0
+  }
+};
 
 window.addEventListener('wheel', (event) => {
-  velocityY += event.deltaY / 16;
+  mTouch.velocity.y += event.deltaY / 16;
 });
 
 window.addEventListener('touchmove', (event) => {
-  velocityY += (lastY - event.touches[0].screenY) / 10;
-  lastY = event.touches[0].screenY;
+  const eventY = event.touches[0].screenY;
+  mTouch.velocity.y += (mTouch.previous.y - eventY) / 10;
+  mTouch.previous.y = eventY;
 });
 
 window.addEventListener('touchstart', (event) => {
-  startY = event.touches[0].screenY;
-  lastY = event.touches[0].screenY;
-  startMillis = event.timeStamp;
+  mTouch.start.y = event.touches[0].screenY;
+  mTouch.previous.y = event.touches[0].screenY;
+  mTouch.start.t = event.timeStamp;
 });
 
 window.addEventListener('touchend', (event) => {
-  velocityY += 10 * (startY - event.changedTouches[0].screenY) / (event.timeStamp - startMillis);
+  const eventY = event.changedTouches[0].screenY;
+  mTouch.velocity.y += 10 * (mTouch.start.y - eventY) / (event.timeStamp - mTouch.start.t);
 });
 
-function render() {
+function updateCamera() {
+  const SCROLL_DAMPENING = 0.9;
   camera.position.set(camera.position.x,
-                      clamp(camera.position.y - velocityY, MAX_DEPTH, 0),
+                      clamp(camera.position.y - mTouch.velocity.y, MAX_DEPTH, 0),
                       camera.position.z);
-  velocityY *= SCROLL_DAMPENING;
+  mTouch.velocity.y *= SCROLL_DAMPENING;
+}
 
+function render() {
+  updateCamera();
   renderer.render(scene, camera);
   requestAnimationFrame(render);
 }
