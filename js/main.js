@@ -42,6 +42,20 @@ window.addEventListener('wheel', (event) => {
                       camera.position.z);
 });
 
+let lastY = 0;
+
+window.addEventListener('touchmove', (event) => {
+  const deltaY = lastY - event.touches[0].screenY;
+  camera.position.set(camera.position.x,
+                      clamp(camera.position.y - deltaY, MAX_DEPTH, 0),
+                      camera.position.z);
+  lastY = event.touches[0].screenY;
+});
+
+window.addEventListener('touchstart', (event) => {
+  lastY = event.touches[0].screenY;
+});
+
 function render() {
   renderer.render(scene, camera);
   requestAnimationFrame(render);
