@@ -36,27 +36,37 @@ for(let i = -NSTRIPS_TOTAL; i <= NSTRIPS_ONSCREEN; i++) {
   scene.add(mS.mesh);  
 }
 
+let startY = 0;
+let startMillis = 0;
+let lastY = 0;
+let velocityY = 0;
+const SCROLL_DAMPENING = 0.9;
+
 window.addEventListener('wheel', (event) => {
-  camera.position.set(camera.position.x,
-                      clamp(camera.position.y - event.deltaY, MAX_DEPTH, 0),
-                      camera.position.z);
+  velocityY += event.deltaY / 16;
 });
 
-let lastY = 0;
-
 window.addEventListener('touchmove', (event) => {
-  const deltaY = lastY - event.touches[0].screenY;
-  camera.position.set(camera.position.x,
-                      clamp(camera.position.y - deltaY, MAX_DEPTH, 0),
-                      camera.position.z);
+  velocityY += (lastY - event.touches[0].screenY) / 10;
   lastY = event.touches[0].screenY;
 });
 
 window.addEventListener('touchstart', (event) => {
+  startY = event.touches[0].screenY;
   lastY = event.touches[0].screenY;
+  startMillis = event.timeStamp;
+});
+
+window.addEventListener('touchend', (event) => {
+  velocityY += 10 * (startY - event.changedTouches[0].screenY) / (event.timeStamp - startMillis);
 });
 
 function render() {
+  camera.position.set(camera.position.x,
+                      clamp(camera.position.y - velocityY, MAX_DEPTH, 0),
+                      camera.position.z);
+  velocityY *= SCROLL_DAMPENING;
+
   renderer.render(scene, camera);
   requestAnimationFrame(render);
 }
