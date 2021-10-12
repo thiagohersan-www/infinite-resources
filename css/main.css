@@ -1,4 +1,22 @@
+::-webkit-scrollbar {
+    display: none; // Safari and Chrome
+}
+
 html, body {
   margin: 0;
   padding: 0;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.my-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.viewport-scroll-bar {
+  width: 100vw;
+  height: 500vh;
 }

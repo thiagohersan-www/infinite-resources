@@ -20,6 +20,7 @@ window.addEventListener('resize', () => {
 
 scene.background = new THREE.Color(0xffffff);
 camera.position.set(0, 0, 110);
+renderer.domElement.classList.add('my-canvas');
 document.body.appendChild(renderer.domElement);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -36,54 +37,40 @@ for(let i = -NSTRIPS_TOTAL; i <= NSTRIPS_ONSCREEN; i++) {
   scene.add(mS.mesh);  
 }
 
+let previousScrollTop = 0;
 
-const mTouch = {
-  start: {
-    x: 0,
-    y: 0,
-    t: 0
-  },
-  previous: {
-    x: 0,
-    y: 0
-  },
-  velocity: {
-    x: 0,
-    y: 0
-  }
-};
-
-window.addEventListener('wheel', (event) => {
-  mTouch.velocity.y += event.deltaY / 16;
-});
-
-window.addEventListener('touchmove', (event) => {
-  const eventY = event.touches[0].screenY;
-  mTouch.velocity.y += (mTouch.previous.y - eventY) / 10;
-  mTouch.previous.y = eventY;
-});
-
-window.addEventListener('touchstart', (event) => {
-  mTouch.start.y = event.touches[0].screenY;
-  mTouch.previous.y = event.touches[0].screenY;
-  mTouch.start.t = event.timeStamp;
-});
-
-window.addEventListener('touchend', (event) => {
-  const eventY = event.changedTouches[0].screenY;
-  mTouch.velocity.y += 10 * (mTouch.start.y - eventY) / (event.timeStamp - mTouch.start.t);
-});
-
-function updateCamera() {
-  const SCROLL_DAMPENING = 0.9;
-  camera.position.set(camera.position.x,
-                      clamp(camera.position.y - mTouch.velocity.y, MAX_DEPTH, 0),
-                      camera.position.z);
-  mTouch.velocity.y *= SCROLL_DAMPENING;
+function getScrollTopPosition() {
+  return (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
 }
 
+function centerScroll() {
+  const mScrollDiv = document.getElementById('my-scroll-div');
+
+  const centerTop = (mScrollDiv.offsetHeight - window.innerHeight) / 2;
+
+  window.removeEventListener('scroll', onScroll);
+  window.scrollTo(0, centerTop);
+  setTimeout(() => previousScrollTop = getScrollTopPosition(), 10);
+  setTimeout(() => window.addEventListener('scroll', onScroll), 20);
+}
+
+window.addEventListener('load', (event) => {
+  setTimeout(centerScroll, 500);
+});
+
+const onScroll = (event) => {
+  const mScrollDiv = document.getElementById('my-scroll-div');
+  const currentScrollTop = getScrollTopPosition();
+  const deltaY = currentScrollTop - previousScrollTop;
+  previousScrollTop = currentScrollTop;
+
+  centerScroll();
+  camera.position.set(camera.position.x,
+                      clamp(camera.position.y - deltaY, MAX_DEPTH, 0),
+                      camera.position.z);
+};
+
 function render() {
-  updateCamera();
   renderer.render(scene, camera);
   requestAnimationFrame(render);
 }
