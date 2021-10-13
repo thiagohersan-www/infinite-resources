@@ -38,6 +38,7 @@ for(let i = -NSTRIPS_TOTAL; i <= NSTRIPS_ONSCREEN; i++) {
 }
 
 let previousScrollTop = 0;
+let previousScrollTimeout;
 
 function getScrollTopPosition() {
   return (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
@@ -64,7 +65,9 @@ const onScroll = (event) => {
   const deltaY = currentScrollTop - previousScrollTop;
   previousScrollTop = currentScrollTop;
 
-  centerScroll();
+  clearTimeout(previousScrollTimeout);
+  previousScrollTimeout = setTimeout(centerScroll, 500);
+  // centerScroll();
   camera.position.set(camera.position.x,
                       clamp(camera.position.y - deltaY, MAX_DEPTH, 0),
                       camera.position.z);

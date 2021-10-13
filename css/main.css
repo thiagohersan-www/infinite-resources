@@ -1,5 +1,5 @@
 ::-webkit-scrollbar {
-    display: none; // Safari and Chrome
+    display: none;
 }
 
 html, body {
@@ -18,5 +18,5 @@ html, body {
 
 .viewport-scroll-bar {
   width: 100vw;
-  height: 500vh;
+  height: 1500vh;
 }
