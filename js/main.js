@@ -57,11 +57,15 @@ const onScroll = (event) => {
   const deltaY = currentScrollTop - previousScrollTop;
   previousScrollTop = currentScrollTop;
 
-  // TODO: if near top/bottom, immediate center
-  //       else set timeout to 1000
+  if (currentScrollTop < (2 * window.innerHeight) ||
+      currentScrollTop > (13 * window.innerHeight)) {
+    clearTimeout(previousScrollTimeout);
+    centerScroll();
+  } else {
+    clearTimeout(previousScrollTimeout);
+    previousScrollTimeout = setTimeout(centerScroll, 2000);
+  }
 
-  clearTimeout(previousScrollTimeout);
-  previousScrollTimeout = setTimeout(centerScroll, 500);
   camera.position.set(camera.position.x,
                       clamp(camera.position.y - deltaY, MAX_DEPTH, 0),
                       camera.position.z);
