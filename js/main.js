@@ -9,7 +9,7 @@ function clamp(num, min, max) {
   return Math.min(Math.max(num, min), max);
 }
 
-window.addEventListener('resize', () => {
+window.addEventListener('__resize__', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
 
@@ -23,6 +23,7 @@ camera.position.set(0, 0, 110);
 renderer.domElement.classList.add('my-canvas');
 document.body.appendChild(renderer.domElement);
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 // TODO: make scroll object
 const NSTRIPS_TOTAL = 100;
