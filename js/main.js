@@ -1,5 +1,5 @@
 import * as THREE from './three/three.module.js';
-import { Strip } from './Strip.js';
+import { Scroll } from './Scroll.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(150, window.innerWidth / window.innerHeight, 1, 200);
@@ -25,18 +25,8 @@ document.body.appendChild(renderer.domElement);
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-// TODO: make scroll object
-const NSTRIPS_TOTAL = 100;
-const NSTRIPS_ONSCREEN = 8;
-const STRIP_HEIGHT = window.innerHeight / NSTRIPS_ONSCREEN;
-const MAX_DEPTH = -(NSTRIPS_TOTAL - 1) * STRIP_HEIGHT;
-
-for(let i = -NSTRIPS_TOTAL; i <= NSTRIPS_ONSCREEN; i++) {
-  const mS = new Strip(window.innerWidth, 0.9999 * STRIP_HEIGHT, i);
-  mS.mesh.position.set(-window.innerWidth / 2,
-                       -window.innerHeight / 2 + i * STRIP_HEIGHT);
-  scene.add(mS.mesh);  
-}
+const mScroll = new Scroll(scene);
+const MAX_DEPTH = -(Scroll.NSTRIPS_TOTAL - 1) * Scroll.STRIP_HEIGHT;
 
 let previousScrollTop = 0;
 let previousScrollTimeout;
@@ -66,6 +56,9 @@ const onScroll = (event) => {
   const currentScrollTop = getScrollTopPosition();
   const deltaY = currentScrollTop - previousScrollTop;
   previousScrollTop = currentScrollTop;
+
+  // TODO: if near top/bottom, immediate center
+  //       else set timeout to 1000
 
   clearTimeout(previousScrollTimeout);
   previousScrollTimeout = setTimeout(centerScroll, 500);
