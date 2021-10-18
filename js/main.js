@@ -9,7 +9,7 @@ function clamp(num, min, max) {
   return Math.min(Math.max(num, min), max);
 }
 
-window.addEventListener('__resize__', () => {
+window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
 
