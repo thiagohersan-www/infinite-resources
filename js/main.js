@@ -39,6 +39,7 @@ for(let i = -NSTRIPS_TOTAL; i <= NSTRIPS_ONSCREEN; i++) {
 
 let previousScrollTop = 0;
 let previousScrollTimeout;
+const mScrollDiv = document.getElementById('my-scroll-div');
 
 function getScrollTopPosition() {
   return (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
@@ -56,18 +57,17 @@ function centerScroll() {
 }
 
 window.addEventListener('load', (event) => {
+  mScrollDiv.style.height = `${15 * window.innerHeight}px`;
   setTimeout(centerScroll, 500);
 });
 
 const onScroll = (event) => {
-  const mScrollDiv = document.getElementById('my-scroll-div');
   const currentScrollTop = getScrollTopPosition();
   const deltaY = currentScrollTop - previousScrollTop;
   previousScrollTop = currentScrollTop;
 
   clearTimeout(previousScrollTimeout);
   previousScrollTimeout = setTimeout(centerScroll, 500);
-  // centerScroll();
   camera.position.set(camera.position.x,
                       clamp(camera.position.y - deltaY, MAX_DEPTH, 0),
                       camera.position.z);
