@@ -6,7 +6,7 @@ class Scroll {
     this.scene = scene;
 
     for(let i = -Scroll.NSTRIPS_TOTAL; i <= Scroll.NSTRIPS_ONSCREEN; i++) {
-      const mS = new Strip(window.innerWidth, 0.9999 * Scroll.STRIP_HEIGHT, i);
+      const mS = new Strip(window.innerWidth, 0.9999 * Scroll.STRIP_HEIGHT, i+Scroll.NSTRIPS_TOTAL);
       mS.mesh.position.set(-window.innerWidth / 2,
                            -window.innerHeight / 2 + i * Scroll.STRIP_HEIGHT);
       scene.add(mS.mesh);
