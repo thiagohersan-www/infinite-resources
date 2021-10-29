@@ -40,20 +40,22 @@ class Strip {
     for (let i = 0; i <= Strip.NUM_POINTS_X; i++) {
       const x = i * deltaX;
       const y_noise = Strip.NOISE.noise2D(x / Strip.DIVERSITY_X, yidx / Strip.DIVERSITY_Y);
-      const y = this.height * Strip.AMPLITUDE * y_noise;
+      const y = this.height * (1 + Strip.AMPLITUDE * y_noise);
       this.shape.lineTo(x, y);
     }
 
     for (let i = 0; i <= Strip.NUM_POINTS_X; i++) {
       const x = this.width - i * deltaX;
       const y_noise = Strip.NOISE.noise2D(x / Strip.DIVERSITY_X, (yidx + 1) / Strip.DIVERSITY_Y);
-      const y = this.height * (1 + Strip.AMPLITUDE * y_noise);
+      const y = this.height * Strip.AMPLITUDE * y_noise;
       this.shape.lineTo(x, y);
     }
     this.shape.lineTo(0, 0);
 
     this.geometry = new THREE.ShapeGeometry(this.shape);
     this.mesh_ = new THREE.Mesh(this.geometry, this.material);
+
+    this.mesh_.position.set(0, -yidx * this.height);
   }
 
   set mesh(mesh) {

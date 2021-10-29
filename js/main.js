@@ -22,6 +22,7 @@ window.addEventListener('resize', () => {
 window.addEventListener('DOMContentLoaded', () => {
   // THREEJS
   scene.background = new THREE.Color(0xffffff);
+  scene.position.set(-window.innerWidth / 2, 0);
   camera.position.set(0, 0, 110);
   renderer.domElement.classList.add('my-canvas');
   document.getElementById('my-container').appendChild(renderer.domElement);
@@ -38,7 +39,7 @@ window.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => renderer.render(scene, camera), 500);
 });
 
-const MAX_DEPTH = (Scroll.NSTRIPS_TOTAL - 1) * Scroll.STRIP_HEIGHT;
+const MAX_DEPTH = (Scroll.NSTRIPS_TOTAL - 1) * Scroll.STRIP_HEIGHT - window.innerHeight / 2;
 
 let previousScrollTop = 0;
 let previousScrollTimeout;
@@ -73,9 +74,9 @@ const onScroll = (event) => {
     previousScrollTimeout = setTimeout(centerScroll, 2000);
   }
 
-  console.log(scene.position);
-
   scene.position.setY(clamp(scene.position.y + deltaY, 0, MAX_DEPTH));
+  console.log(scene.position);
+  // mScroll.update(scene.position);
 
   renderer.render(scene, camera);
 };
