@@ -22,6 +22,11 @@ html, body {
   pointer-events: none;
 }
 
+.viewport-scroll-bar {
+  width: 100vw;
+}
+
+/* GUI */
 .menu {
   width: 100%;
   display: flex;
@@ -32,15 +37,15 @@ html, body {
   box-sizing: border-box;
 }
 
-.param-flip {
-  transform: rotate(180deg);
-}
-
 .param-container {
   display: flex;
   flex-direction: column;
 }
 
-.viewport-scroll-bar {
-  width: 100vw;
+.param-value {
+  font-size: 12px;
+}
+
+.param-flip {
+  transform: rotate(180deg);
 }
