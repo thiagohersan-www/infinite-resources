@@ -8,10 +8,8 @@ class Scroll {
     this.previousTopIdx = 0;
 
     for(let i = 0; i < Scroll.NSTRIPS_TOTAL; i++) {
-      // TODO: might be better to just create and return the THREE.Mesh() object
-      const mS = new Strip(window.innerWidth, Scroll.STRIP_HEIGHT, i);
-
-      scene.add(mS.mesh);
+      const mS = Strip.getMesh(window.innerWidth, Scroll.STRIP_HEIGHT, i);
+      scene.add(mS);
     }
   }
 

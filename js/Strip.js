@@ -2,19 +2,14 @@ import SimplexNoise from './simplex-noise/simplex-noise.js';
 import * as THREE from './three/three.module.js';
 
 class Strip {
-  constructor(width, height, yidx) {
-    this.width = width;
-    this.height = height;
-
-    this.shape = new THREE.Shape();
+  static getMesh(width, height, yidx) {
     const mLoader = new THREE.TextureLoader();
-
-    // TODO: map yidx -> texture
     const tFilename = `./assets/texture${('000' + yidx % 16).slice(-2)}.jpg`;
-    this.texture = mLoader.load(tFilename, (texture) => {
+
+    const mTexture = mLoader.load(tFilename, (texture) => {
       const shape = {
-        width: this.width,
-        height: ((2 * Strip.AMPLITUDE + 1) * this.height)
+        width: width,
+        height: ((2 * Strip.AMPLITUDE + 1) * height)
       };
 
       const shapeAspect = shape.width / shape.height;
@@ -28,41 +23,36 @@ class Strip {
       texture.repeat.set(repeatX, repeatY);
 
       const imageHeightInShapeUnits = shape.width / imageAspect;
-      const offsetX = repeatX * 0.5 * (shape.width - this.width);
-      const offsetY = repeatY * 0.5 * (imageHeightInShapeUnits - this.height);
+      const offsetX = repeatX * 0.5 * (shape.width - width);
+      const offsetY = repeatY * 0.5 * (imageHeightInShapeUnits - height);
       texture.offset.set(offsetX, offsetY);
     });
-    this.material = new THREE.MeshBasicMaterial({ map: this.texture });
 
-    const deltaX = this.width / Strip.NUM_POINTS_X;
+    const mShape = new THREE.Shape();
+    const deltaX = width / Strip.NUM_POINTS_X;
 
-    this.shape.moveTo(0, 0);
+    mShape.moveTo(0, 0);
     for (let i = 0; i <= Strip.NUM_POINTS_X; i++) {
       const x = i * deltaX;
       const y_noise = Strip.NOISE.noise2D(x / Strip.DIVERSITY_X, yidx / Strip.DIVERSITY_Y);
-      const y = this.height * (1 + Strip.AMPLITUDE * y_noise);
-      this.shape.lineTo(x, y);
+      const y = height * (1 + Strip.AMPLITUDE * y_noise);
+      mShape.lineTo(x, y);
     }
 
     for (let i = 0; i <= Strip.NUM_POINTS_X; i++) {
-      const x = this.width - i * deltaX;
+      const x = width - i * deltaX;
       const y_noise = Strip.NOISE.noise2D(x / Strip.DIVERSITY_X, (yidx + 1) / Strip.DIVERSITY_Y);
-      const y = this.height * Strip.AMPLITUDE * y_noise;
-      this.shape.lineTo(x, y);
+      const y = height * Strip.AMPLITUDE * y_noise;
+      mShape.lineTo(x, y);
     }
-    this.shape.lineTo(0, 0);
+    mShape.lineTo(0, 0);
 
-    this.geometry = new THREE.ShapeGeometry(this.shape);
-    this.mesh_ = new THREE.Mesh(this.geometry, this.material);
+    const mMesh = new THREE.Mesh(new THREE.ShapeGeometry(mShape),
+      new THREE.MeshBasicMaterial({ map: mTexture }));
 
-    this.mesh_.position.set(0, -yidx * this.height);
-  }
+    mMesh.position.set(0, -yidx * height);
 
-  set mesh(mesh) {
-    this.mesh_ = mesh;
-  }
-  get mesh() {
-    return this.mesh_;
+    return mMesh;
   }
 }
 
