@@ -35,6 +35,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
   new Scroll(scene);
   new Gui(scene);
+
+  setTimeout(() => renderer.render(scene, camera), 500);
 });
 
 const MAX_DEPTH = -(Scroll.NSTRIPS_TOTAL - 1) * Scroll.STRIP_HEIGHT;
@@ -72,13 +74,7 @@ const onScroll = (event) => {
     previousScrollTimeout = setTimeout(centerScroll, 2000);
   }
 
-  camera.position.set(camera.position.x,
-                      clamp(camera.position.y - deltaY, MAX_DEPTH, 0),
-                      camera.position.z);
-};
-
-function render() {
+  console.log(scene.position);
+  scene.translateY(deltaY);
   renderer.render(scene, camera);
-  requestAnimationFrame(render);
-}
-requestAnimationFrame(render);
+};
