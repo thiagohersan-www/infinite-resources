@@ -9,11 +9,36 @@ html, body {
   scrollbar-width: none;
 }
 
-.my-canvas {
+.container {
   position: fixed;
   top: 0;
   left: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.my-canvas {
   pointer-events: none;
+}
+
+.menu {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.param-flip {
+  transform: rotate(180deg);
+}
+
+.param-container {
+  display: flex;
+  flex-direction: column;
 }
 
 .viewport-scroll-bar {

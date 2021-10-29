@@ -3,9 +3,29 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="./css/main.css">
+    <script type="module" src="./js/main.js"></script>
   </head>
   <body>
     <div id="my-scroll-div" class="viewport-scroll-bar"></div>
+    <div class="container" id="my-container">
+      <div class="menu">
+      <div class="param-container">
+        <label for="num-layer-per" class="param-label">layers per page</label>
+        <input id="param-num-layer" type="range" min="2" max="16" step="1">
+      </div>
+      <div class="param-container">
+        <label for="param-amp" class="param-label">amplitude</label>
+        <input id="param-amp" type="range" min="1" max="4" step="1">
+      </div>
+      <div class="param-container">
+        <label for="param-x-scale" class="param-label">x diversity</label>
+        <input id="param-x-scale" class="param-flip" type="range" min="10" max="300" step="10">
+      </div>
+      <div class="param-container">
+        <label for="param-y-scale" class="param-label">y diversity</label>
+        <input id="param-y-scale" class="param-flip" type="range" min="1" max="100" step="10">
+      </div>
+      </div>
+    </div>
   </body>
-  <script type="module" src="./js/main.js"></script>
 </html>
