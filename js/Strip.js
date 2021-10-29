@@ -10,7 +10,7 @@ class Strip {
     const mLoader = new THREE.TextureLoader();
 
     // TODO: map yidx -> texture
-    const tFilename = `./assets/texture0${(Strip.counter++) % 6}.jpg`;
+    const tFilename = `./assets/texture${('000' + yidx % 16).slice(-2)}.jpg`;
     this.texture = mLoader.load(tFilename, (texture) => {
       const shape = {
         width: this.width,
