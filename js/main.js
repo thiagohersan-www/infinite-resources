@@ -24,7 +24,6 @@ window.addEventListener('DOMContentLoaded', () => {
   scene.background = new THREE.Color(0xffffff);
   camera.position.set(0, 0, 110);
   renderer.domElement.classList.add('my-canvas');
-  //document.body.appendChild(renderer.domElement);
   document.getElementById('my-container').appendChild(renderer.domElement);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -34,7 +33,7 @@ window.addEventListener('DOMContentLoaded', () => {
   setTimeout(centerScroll, 500);
 
   new Scroll(scene);
-  new Gui(scene);
+  new Gui({ scene, camera, renderer });
 
   setTimeout(() => renderer.render(scene, camera), 500);
 });

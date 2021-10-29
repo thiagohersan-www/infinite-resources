@@ -3,8 +3,8 @@ import { Strip } from './Strip.js';
 import { clearScene } from './clear.js';
 
 class Gui {
-  constructor(scene) {
-    this.scene = scene;
+  constructor(threeStuff) {
+    this.three = threeStuff;
 
     document.getElementById('param-num-layer').value = 8;
     document.getElementById('param-amp').value = 1;
@@ -23,7 +23,7 @@ class Gui {
 
     el.parentElement.getElementsByClassName('param-value')[0].innerHTML = el.value;
 
-    clearScene(this.scene);
+    clearScene(this.three.scene);
 
     if (elId.includes('-amp')) {
       Strip.AMPLITUDE = 1.000005 * el.value;
@@ -35,7 +35,9 @@ class Gui {
     } else if (elId.includes('-y-scale')) {
       Strip.DIVERSITY_Y = el.value;
     }
-    new Scroll(this.scene);
+
+    new Scroll(this.three.scene);
+    setTimeout(() => this.three.renderer.render(this.three.scene, this.three.camera), 500);
   }
 }
 
