@@ -75,9 +75,7 @@ const onScroll = (event) => {
     previousScrollTimeout = setTimeout(centerScroll, 2000);
   }
 
-  // scene.position.setY(clamp(scene.position.y + deltaY, 0, MAX_DEPTH));
   scene.position.setY(Math.max(0, scene.position.y + deltaY));
-  // console.log(scene.position);
   mScroll.update(scene.position.y);
 
   renderer.render(scene, camera);
