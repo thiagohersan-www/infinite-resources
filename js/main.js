@@ -19,6 +19,7 @@ window.addEventListener('resize', () => {
   renderer.render(scene, camera);
 });
 
+let mScroll;
 window.addEventListener('DOMContentLoaded', () => {
   // THREEJS
   scene.background = new THREE.Color(0xffffff);
@@ -33,7 +34,7 @@ window.addEventListener('DOMContentLoaded', () => {
   mScrollDiv.style.height = `${15 * window.innerHeight}px`;
   setTimeout(centerScroll, 500);
 
-  new Scroll(scene);
+  mScroll = new Scroll(scene);
   new Gui({ scene, camera, renderer });
 
   setTimeout(() => renderer.render(scene, camera), 500);
@@ -74,9 +75,10 @@ const onScroll = (event) => {
     previousScrollTimeout = setTimeout(centerScroll, 2000);
   }
 
-  scene.position.setY(clamp(scene.position.y + deltaY, 0, MAX_DEPTH));
-  console.log(scene.position);
-  // mScroll.update(scene.position);
+  // scene.position.setY(clamp(scene.position.y + deltaY, 0, MAX_DEPTH));
+  scene.position.setY(Math.max(0, scene.position.y + deltaY));
+  // console.log(scene.position);
+  mScroll.update(scene.position.y);
 
   renderer.render(scene, camera);
 };
