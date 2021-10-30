@@ -1,7 +1,7 @@
 
-function clearScene(obj) {
-  while (obj.children.length > 0) { 
-    clearScene(obj.children[0]);
+function clearObject3D(obj) {
+  while (obj.children && obj.children.length > 0) {
+    clearObject3D(obj.children[0]);
     obj.remove(obj.children[0]);
   }
 
@@ -18,4 +18,4 @@ function clearScene(obj) {
   }
 }
 
-export { clearScene };
+export { clearObject3D };

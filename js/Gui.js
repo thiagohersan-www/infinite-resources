@@ -1,6 +1,6 @@
 import { Scroll } from './Scroll.js';
 import { Strip } from './Strip.js';
-import { clearScene } from './clear.js';
+import { clearObject3D } from './clear.js';
 
 class Gui {
   constructor(threeStuff) {
@@ -23,7 +23,7 @@ class Gui {
 
     el.parentElement.getElementsByClassName('param-value')[0].innerHTML = el.value;
 
-    clearScene(this.three.scene);
+    clearObject3D(this.three.scene);
 
     if (elId.includes('-amp')) {
       Strip.AMPLITUDE = 1.000005 * el.value;
