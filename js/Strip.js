@@ -9,7 +9,7 @@ class Strip {
     const mTexture = mLoader.load(tFilename, (texture) => {
       const shape = {
         width: width,
-        height: ((2 * Strip.AMPLITUDE + 1) * height)
+        height: height + (Strip.AMPLITUDE * height * 2)
       };
 
       const shapeAspect = shape.width / shape.height;
@@ -48,7 +48,8 @@ class Strip {
     mShape.lineTo(0, 0);
 
     const mMesh = new THREE.Mesh(new THREE.ShapeGeometry(mShape),
-      new THREE.MeshBasicMaterial({ map: mTexture }));
+      new THREE.MeshBasicMaterial({ map: mTexture })
+    );
 
     mMesh.position.set(0, -yidx * height);
 
@@ -57,7 +58,7 @@ class Strip {
 }
 
 Strip.NOISE = new SimplexNoise('seed');
-Strip.AMPLITUDE = 1.000005;
+Strip.AMPLITUDE = 1.0;
 Strip.NUM_POINTS_X = 100.0;
 Strip.DIVERSITY_X = 160.0;
 Strip.DIVERSITY_Y = 10.0;
