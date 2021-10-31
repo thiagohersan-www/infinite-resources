@@ -31,7 +31,7 @@ class Strip {
     const mShape = new THREE.Shape();
     const deltaX = width / Strip.NUM_POINTS_X;
 
-    mShape.moveTo(0, 0);
+    mShape.moveTo(0, height);
     for (let i = 0; i <= Strip.NUM_POINTS_X; i++) {
       const x = i * deltaX;
       const y_noise = Strip.NOISE.noise2D(x / Strip.DIVERSITY_X, yidx / Strip.DIVERSITY_Y);
@@ -45,7 +45,7 @@ class Strip {
       const y = height * Strip.AMPLITUDE * y_noise;
       mShape.lineTo(x, y);
     }
-    mShape.lineTo(0, 0);
+    mShape.lineTo(0, height);
 
     const mMesh = new THREE.Mesh(new THREE.ShapeGeometry(mShape),
       new THREE.MeshBasicMaterial({ map: mTexture })
