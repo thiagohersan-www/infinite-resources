@@ -15,9 +15,9 @@ class Scroll {
   }
 
   update(topPosition) {
-    const topIdx = Math.floor(topPosition / Scroll.STRIP_HEIGHT - (Scroll.NSTRIPS_TOTAL / 2));
+    const topIdx = Math.max(0, Math.floor(topPosition / Scroll.STRIP_HEIGHT - (Scroll.NSTRIPS_TOTAL / 2)));
 
-    if (topIdx < 0) return;
+    if (topIdx == 0 && this.previousTopIdx == 0) return;
 
     if (topIdx > this.previousTopIdx) {
       for (var i = this.previousTopIdx; i < topIdx; i++) {
@@ -27,8 +27,8 @@ class Scroll {
         this.meshes[i % Scroll.NSTRIPS_TOTAL] = Strip.getMesh(window.innerWidth, Scroll.STRIP_HEIGHT, i + Scroll.NSTRIPS_TOTAL);
         this.scene.add(this.meshes[i % Scroll.NSTRIPS_TOTAL]);
       }
-    } else {
-      for (var i = this.previousTopIdx; i > topIdx - 1; i--) {
+    } else if (topIdx < this.previousTopIdx) {
+      for (var i = this.previousTopIdx - 1; i > topIdx - 1; i--) {
         this.scene.remove(this.meshes[i % Scroll.NSTRIPS_TOTAL]);
         clearObject3D(this.meshes[i % Scroll.NSTRIPS_TOTAL]);
 
@@ -41,7 +41,7 @@ class Scroll {
   }
 }
 
-Scroll.NSTRIPS_TOTAL = 120;
+Scroll.NSTRIPS_TOTAL = 100;
 Scroll.NSTRIPS_ONSCREEN = 8;
 Scroll.STRIP_HEIGHT = window.innerHeight / Scroll.NSTRIPS_ONSCREEN;
 
