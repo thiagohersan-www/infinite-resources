@@ -6,10 +6,6 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(150, window.innerWidth / window.innerHeight, 1, 200);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 
-function clamp(num, min, max) {
-  return Math.min(Math.max(num, min), max);
-}
-
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
@@ -39,8 +35,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
   setTimeout(() => renderer.render(scene, camera), 500);
 });
-
-const MAX_DEPTH = (Scroll.NSTRIPS_TOTAL - 1) * Scroll.STRIP_HEIGHT - window.innerHeight / 2;
 
 let previousScrollTop = 0;
 let previousScrollTimeout;
