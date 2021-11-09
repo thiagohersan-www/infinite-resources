@@ -59,7 +59,7 @@ class Strip {
 
 Strip.NOISE = new SimplexNoise('seed');
 Strip.AMPLITUDE = 1.0;
-Strip.NUM_POINTS_X = 100.0;
+Strip.NUM_POINTS_X = 256.0;
 Strip.DIVERSITY_X = 160.0;
 Strip.DIVERSITY_Y = 10.0;
 Strip.counter = 0;
