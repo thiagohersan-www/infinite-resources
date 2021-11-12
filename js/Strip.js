@@ -9,7 +9,7 @@ const BY_HLS = JSON.parse(by_hls);
 class Strip {
   static getMesh(width, height, yidx) {
     const mLoader = new THREE.TextureLoader();
-    const tFilename = `./assets/${BY_RGB[yidx % BY_RGB.length]}.jpg`;
+    const tFilename = `./assets/textures/${BY_RGB[yidx % BY_RGB.length]}.jpg`;
 
     const mTexture = mLoader.load(tFilename, (texture) => {
       const shape = {
