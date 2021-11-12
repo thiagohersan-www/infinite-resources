@@ -2,12 +2,15 @@ import * as THREE from './three/three.module.js';
 import { Gui } from './Gui.js';
 import { Scroll } from './Scroll.js';
 
+const CAM_FOV = 150;
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(150, window.innerWidth / window.innerHeight, 1, 150);
+const camera = new THREE.PerspectiveCamera(CAM_FOV, window.innerWidth / window.innerHeight, 1, 150);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
+  const cam_z = (window.innerHeight / 2) / Math.tan(CAM_FOV / 2 * Math.PI / 180);
+  camera.position.set(0, 0, cam_z);
   camera.updateProjectionMatrix();
 
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -20,7 +23,8 @@ window.addEventListener('DOMContentLoaded', () => {
   // THREEJS
   scene.background = new THREE.Color(0xffffff);
   scene.position.set(-window.innerWidth / 2, 0);
-  camera.position.set(0, 0, 100);
+  const cam_z = (window.innerHeight / 2) / Math.tan(CAM_FOV / 2 * Math.PI / 180);
+  camera.position.set(0, 0, cam_z);
   renderer.domElement.classList.add('my-canvas');
   document.getElementById('my-container').appendChild(renderer.domElement);
   renderer.setSize(window.innerWidth, window.innerHeight);
