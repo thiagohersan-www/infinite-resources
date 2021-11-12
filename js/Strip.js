@@ -35,7 +35,7 @@ class Strip {
     for (let i = 0; i <= Strip.NUM_POINTS_X; i++) {
       const x = i * deltaX;
       const y_noise = Strip.NOISE.noise2D(x / Strip.DIVERSITY_X, yidx / Strip.DIVERSITY_Y);
-      const y = height * (1 + Strip.AMPLITUDE * y_noise);
+      const y = (yidx === 0) ? height : height * (1 + Strip.AMPLITUDE * y_noise);
       mShape.lineTo(x, y);
     }
 
