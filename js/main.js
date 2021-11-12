@@ -3,7 +3,7 @@ import { Gui } from './Gui.js';
 import { Scroll } from './Scroll.js';
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(150, window.innerWidth / window.innerHeight, 1, 200);
+const camera = new THREE.PerspectiveCamera(150, window.innerWidth / window.innerHeight, 1, 150);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 
 window.addEventListener('resize', () => {
@@ -20,7 +20,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // THREEJS
   scene.background = new THREE.Color(0xffffff);
   scene.position.set(-window.innerWidth / 2, 0);
-  camera.position.set(0, 0, 110);
+  camera.position.set(0, 0, 100);
   renderer.domElement.classList.add('my-canvas');
   document.getElementById('my-container').appendChild(renderer.domElement);
   renderer.setSize(window.innerWidth, window.innerHeight);
