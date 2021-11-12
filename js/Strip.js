@@ -1,10 +1,15 @@
 import SimplexNoise from './simplex-noise/simplex-noise.js';
 import * as THREE from './three/three.module.js';
+import { by_rgb } from './by_rgb.js';
+import { by_hls } from './by_hls.js';
+
+const BY_RGB = JSON.parse(by_rgb);
+const BY_HLS = JSON.parse(by_hls);
 
 class Strip {
   static getMesh(width, height, yidx) {
     const mLoader = new THREE.TextureLoader();
-    const tFilename = `./assets/texture${('000' + yidx % 16).slice(-2)}.jpg`;
+    const tFilename = `./assets/${BY_RGB[yidx % BY_RGB.length]}.jpg`;
 
     const mTexture = mLoader.load(tFilename, (texture) => {
       const shape = {
@@ -36,14 +41,14 @@ class Strip {
       const x = i * deltaX;
       const y_noise = Strip.NOISE.noise2D(x / Strip.DIVERSITY_X, yidx / Strip.DIVERSITY_Y);
       const y = (yidx === 0) ? height : height * (1 + Strip.AMPLITUDE * y_noise);
-      mShape.lineTo(x, y);
+      mShape.lineTo(x, y-0);
     }
 
     for (let i = 0; i <= Strip.NUM_POINTS_X; i++) {
       const x = width - i * deltaX;
       const y_noise = Strip.NOISE.noise2D(x / Strip.DIVERSITY_X, (yidx + 1) / Strip.DIVERSITY_Y);
       const y = height * Strip.AMPLITUDE * y_noise;
-      mShape.lineTo(x, y);
+      mShape.lineTo(x, y+0);
     }
     mShape.lineTo(0, height);
 
