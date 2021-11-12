@@ -6,10 +6,10 @@ class Gui {
   constructor(threeStuff) {
     this.three = threeStuff;
 
-    document.getElementById('param-num-layer').value = 8;
+    document.getElementById('param-num-layer').value = 10;
     document.getElementById('param-amp').value = 1;
     document.getElementById('param-x-scale').value = 160;
-    document.getElementById('param-y-scale').value = 10;
+    document.getElementById('param-y-scale').value = 20;
 
     Array.from(document.getElementsByTagName('input')).forEach(el => {
       el.addEventListener('change', this.updateParam);

@@ -57,11 +57,20 @@ class Strip {
   }
 }
 
-Strip.NOISE = new SimplexNoise('seed');
-Strip.AMPLITUDE = 1.0;
+// Strip.NOISE = new SimplexNoise(new Date());
+Strip.NOISE = new SimplexNoise('new Date()');
+
 Strip.NUM_POINTS_X = 256.0;
+
+// amp: 0.6 - (1.0)
+Strip.AMPLITUDE = 1.0;
+
+// x-diversity: 200 - (160)
 Strip.DIVERSITY_X = 160.0;
-Strip.DIVERSITY_Y = 10.0;
+
+// y-diversity: 45 - (20)
+Strip.DIVERSITY_Y = 20.0;
+
 Strip.counter = 0;
 
 export { Strip };
