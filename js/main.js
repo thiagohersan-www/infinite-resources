@@ -79,7 +79,7 @@ const onScroll = (event) => {
 
   scene.position.setY(Math.max(LAYERS_Y_OFFSET, scene.position.y + deltaY));
   window.mScroll.update(scene.position.y);
-  mShadowDiv.style.opacity = Math.min(1, 0.3333 * scene.position.y / window.innerHeight);
+  mShadowDiv.style.opacity = Math.max(0, Math.min(1, 0.2 * scene.position.y / window.innerHeight));
 
   renderer.render(scene, camera);
 };
