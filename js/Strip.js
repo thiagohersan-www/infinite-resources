@@ -5,13 +5,14 @@ import { by_hls } from './by_hls.js';
 
 const BY_RGB = JSON.parse(by_rgb);
 const BY_HLS = JSON.parse(by_hls);
+const BY_COLOR = BY_RGB.concat(BY_HLS);
 
 class Strip {
-  static getMesh(width, height, yidx) {
+  static getMesh(width, height, yidx, render) {
     const mLoader = new THREE.TextureLoader();
-    const tFilename = `./assets/textures/${BY_RGB[yidx % BY_RGB.length]}.jpg`;
+    const tFilename = `./assets/textures/${BY_COLOR[yidx % BY_COLOR.length]}.jpg`;
 
-    const mTexture = mLoader.load(tFilename, (texture) => {
+    mLoader.load(tFilename, (texture) => {
       const shape = {
         width: width,
         height: height + (Strip.AMPLITUDE * height * 2)
@@ -31,6 +32,10 @@ class Strip {
       const offsetX = repeatX * 0.5 * (shape.width - width);
       const offsetY = repeatY * 0.5 * (imageHeightInShapeUnits - height);
       texture.offset.set(offsetX, offsetY);
+
+      mMesh.material.map = texture;
+      mMesh.material.needsUpdate = true;
+      if (render) render();
     });
 
     const mShape = new THREE.Shape();
@@ -57,9 +62,7 @@ class Strip {
     }
     mShape.lineTo(0, height);
 
-    const mMesh = new THREE.Mesh(new THREE.ShapeGeometry(mShape),
-      new THREE.MeshBasicMaterial({ map: mTexture })
-    );
+    const mMesh = new THREE.Mesh(new THREE.ShapeGeometry(mShape), new THREE.MeshBasicMaterial());
 
     mMesh.position.set(0, -yidx * height);
 

@@ -34,10 +34,8 @@ window.addEventListener('DOMContentLoaded', () => {
   mScrollDiv.style.height = `${15 * window.innerHeight}px`;
   setTimeout(centerScroll, 500);
 
-  mScroll = new Scroll(scene);
-  new Gui({ scene, camera, renderer });
-
-  setTimeout(() => renderer.render(scene, camera), 500);
+  mScroll = new Scroll(scene, () => renderer.render(scene, camera));
+  new Gui(scene, () => renderer.render(scene, camera));
 });
 
 let previousScrollTop = 0;

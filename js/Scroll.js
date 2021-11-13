@@ -3,13 +3,13 @@ import { Strip } from './Strip.js';
 import { clearObject3D } from './clear.js';
 
 class Scroll {
-  constructor(scene) {
+  constructor(scene, render) {
     this.scene = scene;
     this.meshes = Array(Scroll.NSTRIPS_TOTAL);
     this.previousTopIdx = 0;
 
-    for(let i = 0; i < Scroll.NSTRIPS_TOTAL; i++) {
-      this.meshes[i] = Strip.getMesh(window.innerWidth, Scroll.STRIP_HEIGHT, i);
+    for (let i = 0; i < Scroll.NSTRIPS_TOTAL; i++) {
+      this.meshes[i] = Strip.getMesh(window.innerWidth, Scroll.STRIP_HEIGHT, i, render);
       scene.add(this.meshes[i]);
     }
   }
@@ -42,6 +42,7 @@ class Scroll {
 }
 
 Scroll.NSTRIPS_TOTAL = 100;
+// nstrips(tgh): 6
 Scroll.NSTRIPS_ONSCREEN = 10;
 Scroll.STRIP_HEIGHT = window.innerHeight / Scroll.NSTRIPS_ONSCREEN;
 
