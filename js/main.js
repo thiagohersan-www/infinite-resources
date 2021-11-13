@@ -41,6 +41,7 @@ window.addEventListener('DOMContentLoaded', () => {
 let previousScrollTop = 0;
 let previousScrollTimeout;
 const mScrollDiv = document.getElementById('my-scroll-div');
+const mShadowDiv = document.getElementById('my-shadow-div');
 
 function getScrollTopPosition() {
   return (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
@@ -73,6 +74,7 @@ const onScroll = (event) => {
 
   scene.position.setY(Math.max(0, scene.position.y + deltaY));
   mScroll.update(scene.position.y);
+  mShadowDiv.style.opacity = Math.min(1, 0.3333 * scene.position.y / window.innerHeight);
 
   renderer.render(scene, camera);
 };
