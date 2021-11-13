@@ -35,20 +35,25 @@ class Strip {
 
     const mShape = new THREE.Shape();
     const deltaX = width / Strip.NUM_POINTS_X;
+    const spacer = 1;
 
     mShape.moveTo(0, height);
     for (let i = 0; i <= Strip.NUM_POINTS_X; i++) {
       const x = i * deltaX;
       const y_noise = Strip.NOISE.noise2D(x / Strip.DIVERSITY_X, yidx / Strip.DIVERSITY_Y);
-      const y = (yidx === 0) ? height : height * (1 + Strip.AMPLITUDE * y_noise);
-      mShape.lineTo(x, y-0);
+      const y_noise_h = Strip.NOISE.noise2D(Strip.DIVERSITY_X_HIGH_FACTOR * x / Strip.DIVERSITY_X, yidx / Strip.DIVERSITY_Y);
+
+      const y = (yidx === 0) ? 0 : height * Strip.AMPLITUDE * (y_noise + Strip.DIVERSITY_X_HIGH_AMP * y_noise_h);
+      mShape.lineTo(x, height + y - spacer);
     }
 
     for (let i = 0; i <= Strip.NUM_POINTS_X; i++) {
       const x = width - i * deltaX;
       const y_noise = Strip.NOISE.noise2D(x / Strip.DIVERSITY_X, (yidx + 1) / Strip.DIVERSITY_Y);
-      const y = height * Strip.AMPLITUDE * y_noise;
-      mShape.lineTo(x, y+0);
+      const y_noise_h = Strip.NOISE.noise2D(Strip.DIVERSITY_X_HIGH_FACTOR * x / Strip.DIVERSITY_X, (yidx + 1) / Strip.DIVERSITY_Y);
+
+      const y = height * Strip.AMPLITUDE * (y_noise + Strip.DIVERSITY_X_HIGH_AMP * y_noise_h);
+      mShape.lineTo(x, y + spacer);
     }
     mShape.lineTo(0, height);
 
@@ -68,12 +73,18 @@ Strip.NOISE = new SimplexNoise('new Date()');
 Strip.NUM_POINTS_X = 256.0;
 
 // amp: 0.6 - (1.0)
+// amp(tgh): 0.6
 Strip.AMPLITUDE = 1.0;
 
 // x-diversity: 200 - (160)
+// x(tgh): 200
 Strip.DIVERSITY_X = 160.0;
 
+Strip.DIVERSITY_X_HIGH_FACTOR = 4.0;
+Strip.DIVERSITY_X_HIGH_AMP = 0.2;
+
 // y-diversity: 45 - (20)
+// y(tgh): 40
 Strip.DIVERSITY_Y = 20.0;
 
 Strip.counter = 0;
