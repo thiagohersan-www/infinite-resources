@@ -28,7 +28,7 @@ class Gui {
         Strip.DIVERSITY_Y = el.value;
       }
 
-      new Scroll(scene, render);
+      window.mScroll = new Scroll(scene, render);
     };
 
     Array.from(document.getElementsByTagName('input')).forEach(el => {
