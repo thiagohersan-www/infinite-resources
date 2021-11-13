@@ -27,6 +27,7 @@ html, body {
   background-image: url('../assets/shadow.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
+  z-index: 2;
 }
 
 .my-canvas {
@@ -46,6 +47,7 @@ html, body {
   align-items: flex-start;
   padding: 10px;
   box-sizing: border-box;
+  z-index: 8;
 }
 
 .param-container {
