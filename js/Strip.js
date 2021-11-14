@@ -10,7 +10,7 @@ const BY_COLOR = BY_RGB.concat(BY_HLS);
 class Strip {
   static getMesh(width, height, yidx, render) {
     const mLoader = new THREE.TextureLoader();
-    const tFilename = `./assets/textures/${BY_COLOR[yidx % BY_COLOR.length]}.jpg`;
+    const tFilename = `./assets/textures/${BY_COLOR[(yidx + 0) % BY_COLOR.length]}.jpg`;
 
     mLoader.load(tFilename, (texture) => {
       const shape = {
@@ -76,18 +76,15 @@ Strip.NOISE = new SimplexNoise('new Date()');
 Strip.NUM_POINTS_X = 256.0;
 
 // amp: 0.6 - (1.0)
-// amp(tgh): 0.6
-Strip.AMPLITUDE = 1.0;
+Strip.AMPLITUDE = 0.7;
 
 // x-diversity: 200 - (160)
-// x(tgh): 200
-Strip.DIVERSITY_X = 160.0;
+Strip.DIVERSITY_X = 180.0;
 
 Strip.DIVERSITY_X_HIGH_FACTOR = 4.0;
 Strip.DIVERSITY_X_HIGH_AMP = 0.2;
 
 // y-diversity: 45 - (20)
-// y(tgh): 40
 Strip.DIVERSITY_Y = 20.0;
 
 Strip.counter = 0;

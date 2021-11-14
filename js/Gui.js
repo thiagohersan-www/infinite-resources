@@ -4,9 +4,9 @@ import { clearObject3D } from './clear.js';
 
 class Gui {
   constructor(scene, render) {
-    document.getElementById('param-num-layer').value = 10;
-    document.getElementById('param-amp').value = 1;
-    document.getElementById('param-x-scale').value = 160;
+    document.getElementById('param-num-layer').value = 7;
+    document.getElementById('param-amp').value = 0.7;
+    document.getElementById('param-x-scale').value = 180;
     document.getElementById('param-y-scale').value = 20;
 
     const updateParam = (ev) => {

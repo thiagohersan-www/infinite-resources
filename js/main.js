@@ -1,5 +1,4 @@
 import * as THREE from './three/three.module.js';
-import { Gui } from './Gui.js';
 import { Scroll } from './Scroll.js';
 
 const CAM_FOV = 150;
@@ -40,7 +39,6 @@ window.addEventListener('DOMContentLoaded', () => {
   setTimeout(centerScroll, 500);
 
   window.mScroll = new Scroll(scene, () => renderer.render(scene, camera));
-  window.mGui = new Gui(scene, () => renderer.render(scene, camera));
 });
 
 
