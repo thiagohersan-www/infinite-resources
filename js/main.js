@@ -14,7 +14,7 @@ function setupScene() {
   camera.position.set(0, 0, camZ);
   camera.updateProjectionMatrix();
 
-  scene.background = new THREE.Color(0xffffff);
+  scene.background = new THREE.Color(0x666666);
   scene.position.setX(-window.innerWidth / 2);
   if (window.mScroll === undefined) {
     scene.position.setY(LAYERS_Y_OFFSET);
@@ -77,7 +77,7 @@ const onScroll = (event) => {
 
   scene.position.setY(Math.max(LAYERS_Y_OFFSET, scene.position.y + deltaY));
   window.mScroll.update(scene.position.y);
-  mShadowDiv.style.opacity = Math.max(0, Math.min(1, 0.2 * scene.position.y / window.innerHeight));
+  mShadowDiv.style.opacity = Math.max(0, Math.min(1, 0.33 * scene.position.y / window.innerHeight));
 
   renderer.render(scene, camera);
 };
