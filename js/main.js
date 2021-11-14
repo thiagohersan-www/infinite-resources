@@ -40,7 +40,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // INFO
   document.getElementById('hide-overlay-button').addEventListener('click', hideOverlay);
-  showOverlay();
+  document.getElementById('my-popup').addEventListener('click', (e) => e.stopPropagation());
+  document.getElementById('my-overlay').addEventListener('click', hideOverlay);
 
   window.mScroll = new Scroll(scene, () => renderer.render(scene, camera));
 });
@@ -90,7 +91,7 @@ const hideOverlay = (event) => {
   document.getElementById('my-overlay').style.opacity = 0;
   setTimeout(() => document.getElementById('my-overlay').style.display = 'none', 200);
   document.getElementById('my-scroll-div').style.display = 'block';
-  window.addEventListener('scroll', onScroll);
+  centerScroll();
   window.removeEventListener('keyup', checkEscKey);
 };
 
