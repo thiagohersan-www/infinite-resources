@@ -38,6 +38,10 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('my-scroll-div').style.height = `${15 * window.innerHeight}px`;
   setTimeout(centerScroll, 500);
 
+  // INFO
+  document.getElementById('hide-overlay-button').addEventListener('click', hideOverlay);
+  showOverlay();
+
   window.mScroll = new Scroll(scene, () => renderer.render(scene, camera));
 });
 
@@ -81,3 +85,27 @@ const onScroll = (event) => {
 
   renderer.render(scene, camera);
 };
+
+const hideOverlay = (event) => {
+  document.getElementById('my-overlay').style.opacity = 0;
+  setTimeout(() => document.getElementById('my-overlay').style.display = 'none', 200);
+  document.getElementById('my-scroll-div').style.display = 'block';
+  window.addEventListener('scroll', onScroll);
+  window.removeEventListener('keyup', checkEscKey);
+};
+
+const showOverlay = (event) => {
+  document.getElementById('my-overlay').style.display = 'flex';
+  setTimeout(() => document.getElementById('my-overlay').style.opacity = 1, 100);
+  window.removeEventListener('scroll', onScroll);
+  document.getElementById('my-scroll-div').style.display = 'none';
+  window.addEventListener('keyup', checkEscKey);
+};
+
+const checkEscKey = (event) => {
+  if(event.key && (event.key === 'Escape' || event.key === 'Esc')) {
+    hideOverlay();
+  }
+}
+
+window.showOverlay = showOverlay;
