@@ -42,6 +42,7 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('hide-overlay-button').addEventListener('click', hideOverlay);
   document.getElementById('my-popup').addEventListener('click', (e) => e.stopPropagation());
   document.getElementById('my-overlay').addEventListener('click', hideOverlay);
+  document.getElementById('my-info-button').addEventListener('click', showOverlay);
 
   window.mScroll = new Scroll(scene, () => renderer.render(scene, camera));
 });
@@ -66,6 +67,7 @@ function centerScroll() {
 
 const onScroll = (event) => {
   const mShadowDiv = document.getElementById('my-shadow-div');
+  const mInfoButton = document.getElementById('my-info-button');
 
   const currentScrollTop = getScrollTopPosition();
   const deltaY = currentScrollTop - previousScrollTop;
@@ -82,7 +84,13 @@ const onScroll = (event) => {
 
   scene.position.setY(Math.max(LAYERS_Y_OFFSET, scene.position.y + deltaY));
   window.mScroll.update(scene.position.y);
-  mShadowDiv.style.opacity = Math.max(0, Math.min(1, 0.33 * scene.position.y / window.innerHeight));
+
+  const shadowOpacity = 0.33 * scene.position.y / window.innerHeight;
+  const infoOpacity = 1.0 - (5 * (scene.position.y - LAYERS_Y_OFFSET) / window.innerHeight);
+
+  mShadowDiv.style.opacity = Math.max(0, Math.min(1, shadowOpacity));
+  mInfoButton.style.opacity = Math.max(0, Math.min(1, infoOpacity));
+  mInfoButton.style.display = (infoOpacity <= 0) ? 'none' : 'block';
 
   renderer.render(scene, camera);
 };
@@ -108,5 +116,3 @@ const checkEscKey = (event) => {
     hideOverlay();
   }
 }
-
-window.showOverlay = showOverlay;

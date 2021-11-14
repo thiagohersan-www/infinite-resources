@@ -82,6 +82,26 @@ html, body {
   width: 100%;
 }
 
+.info {
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 4;
+  opacity: 1;
+}
+
+.info .info-button {
+  display: block;
+  margin: 48px;
+  font-size: 24px;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
 .shadow {
   position: fixed;
   top: 0;
