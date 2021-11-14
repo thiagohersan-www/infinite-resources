@@ -79,14 +79,14 @@ const onScroll = (event) => {
     centerScroll();
   } else {
     clearTimeout(previousScrollTimeout);
-    previousScrollTimeout = setTimeout(centerScroll, 2000);
+    previousScrollTimeout = setTimeout(centerScroll, 1000);
   }
 
   scene.position.setY(Math.max(LAYERS_Y_OFFSET, scene.position.y + deltaY));
   window.mScroll.update(scene.position.y);
 
   const shadowOpacity = 0.33 * scene.position.y / window.innerHeight;
-  const infoOpacity = 1.0 - (5 * (scene.position.y - LAYERS_Y_OFFSET) / window.innerHeight);
+  const infoOpacity = 1.0 - (2 * (scene.position.y - LAYERS_Y_OFFSET) / window.innerHeight);
 
   mShadowDiv.style.opacity = Math.max(0, Math.min(1, shadowOpacity));
   mInfoButton.style.opacity = Math.max(0, Math.min(1, infoOpacity));

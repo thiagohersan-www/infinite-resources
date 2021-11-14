@@ -36,11 +36,13 @@ html, body {
 .overlay .popup {
   position: relative;
   width: 90%;
-  max-width: 800px;
-  height: 40%;
+  max-width: 900px;
+  /* mobile: height: 80%; */
+  height: 45%;
   padding: 40px 40px;
   background-color: black;
   color: #fff;
+  box-sizing: border-box;
 }
 
 .overlay .popup .button {
