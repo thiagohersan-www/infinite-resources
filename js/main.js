@@ -1,8 +1,9 @@
 import * as THREE from './three/three.module.js';
 import { Scroll } from './Scroll.js';
+import { Strip } from './Strip.js';
 
 const CAM_FOV = 150;
-const LAYERS_Y_OFFSET = -window.innerHeight / 2.0 - Scroll.STRIP_HEIGHT;
+const LAYERS_Y_OFFSET = -window.innerHeight / 2.0 - (Scroll.STRIP_HEIGHT + 0.5 * Strip.AMPLITUDE * Scroll.STRIP_HEIGHT);
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(CAM_FOV, window.innerWidth / window.innerHeight, 1, 150);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -85,7 +86,7 @@ const onScroll = (event) => {
   scene.position.setY(Math.max(LAYERS_Y_OFFSET, scene.position.y + deltaY));
   window.mScroll.update(scene.position.y);
 
-  const shadowOpacity = 0.33 * scene.position.y / window.innerHeight;
+  const shadowOpacity = 2 * (scene.position.y - LAYERS_Y_OFFSET) / window.innerHeight;
   const infoOpacity = 1.0 - (2 * (scene.position.y - LAYERS_Y_OFFSET) / window.innerHeight);
 
   mShadowDiv.style.opacity = Math.max(0, Math.min(1, shadowOpacity));

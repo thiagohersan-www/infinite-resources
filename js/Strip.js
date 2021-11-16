@@ -31,7 +31,7 @@ class Strip {
 
     const mMesh = new THREE.Mesh(new THREE.ShapeGeometry(mShape), new THREE.MeshBasicMaterial());
 
-    mMesh.position.set(0, stripHeight - Strip.SPACER);
+    mMesh.position.set(0, 0.5 * Strip.AMPLITUDE * stripHeight);
 
     return mMesh;
   }
@@ -80,7 +80,8 @@ class Strip {
       const y_noise = Strip.NOISE.noise2D(x / Strip.DIVERSITY_X, yidx / Strip.DIVERSITY_Y);
       const y_noise_h = Strip.NOISE.noise2D(Strip.DIVERSITY_X_HIGH_FACTOR * x / Strip.DIVERSITY_X, yidx / Strip.DIVERSITY_Y);
 
-      const y = (yidx === 0) ? 0 : height * Strip.AMPLITUDE * (y_noise + Strip.DIVERSITY_X_HIGH_AMP * y_noise_h);
+      const firstLayerDamp = (yidx === 0) ? 0.5 : 1.0;
+      const y = firstLayerDamp * height * Strip.AMPLITUDE * (y_noise + Strip.DIVERSITY_X_HIGH_AMP * y_noise_h);
       mShape.lineTo(x, height + y - Strip.SPACER);
     }
 
