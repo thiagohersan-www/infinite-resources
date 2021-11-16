@@ -31,7 +31,7 @@ class Strip {
 
     const mMesh = new THREE.Mesh(new THREE.ShapeGeometry(mShape), new THREE.MeshBasicMaterial());
 
-    mMesh.position.set(0, 0.5 * Strip.AMPLITUDE * stripHeight);
+    mMesh.position.set(0, 0.5 * Strip.AMPLITUDE * stripHeight, -0.5);
 
     return mMesh;
   }
@@ -104,7 +104,7 @@ class Strip {
 }
 
 // Strip.NOISE = new SimplexNoise(new Date());
-Strip.NOISE = new SimplexNoise('new Date()');
+Strip.NOISE = new SimplexNoise('infinitum');
 
 Strip.NUM_POINTS_X = 256.0;
 
@@ -120,6 +120,6 @@ Strip.DIVERSITY_X_HIGH_AMP = 0.2;
 // y-diversity: 45 - (20)
 Strip.DIVERSITY_Y = 20.0;
 
-Strip.SPACER = 1;
+Strip.SPACER = 0;
 
 export { Strip };
