@@ -2,7 +2,7 @@ import * as THREE from './three/three.module.js';
 import { Scroll } from './Scroll.js';
 
 const CAM_FOV = 150;
-const LAYERS_Y_OFFSET = -window.innerHeight / 2.0;
+const LAYERS_Y_OFFSET = -window.innerHeight / 2.0 - Scroll.STRIP_HEIGHT;
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(CAM_FOV, window.innerWidth / window.innerHeight, 1, 150);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
