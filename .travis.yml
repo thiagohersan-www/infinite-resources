@@ -1,0 +1,17 @@
+notifications:
+  email: false
+
+script:
+    - git remote add mn https://thiagohersan:$GHTOKEN@github.com/marinagem-www/infinitum.marinagem.com.git
+    - git remote add th https://thiagohersan:$GHTOKEN@github.com/thiagohersan-www/infinitum.thiagohersan.com.git
+    - git checkout --orphan gh-pages
+    - git rm --cached -r .
+    - git add assets/ css/ js/ index.html
+    - git commit -m "updates sites"
+    - git push mn :gh-pages
+    - git push th :gh-pages
+    - git push mn gh-pages
+    - git push th gh-pages
+
+
+# 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
