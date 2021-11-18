@@ -106,8 +106,8 @@ html, body {
 
 .info .info-button {
   display: block;
-  margin: 48px;
-  font-size: 24px;
+  margin: 30px 40px;
+  font-size: 20px;
   cursor: pointer;
   box-sizing: border-box;
 }
