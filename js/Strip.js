@@ -31,7 +31,7 @@ class Strip {
 
     const mMesh = new THREE.Mesh(new THREE.ShapeGeometry(mShape), new THREE.MeshBasicMaterial());
 
-    mMesh.position.set(0, 0.5 * Strip.AMPLITUDE * stripHeight, -0.5);
+    mMesh.position.set(0, 0.5 * Strip.AMPLITUDE * stripHeight, -0.005);
 
     return mMesh;
   }
