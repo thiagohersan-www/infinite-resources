@@ -13,5 +13,3 @@ script:
     - git push mn gh-pages
     - git push th gh-pages
 
-
-# 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
