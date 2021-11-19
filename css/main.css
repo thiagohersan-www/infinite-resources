@@ -45,7 +45,6 @@ html, body {
   position: relative;
   width: 90%;
   max-width: 900px;
-  /* mobile: height: 80%; */
   height: 45%;
   padding: 40px 40px;
   background-color: black;
@@ -115,7 +114,6 @@ html, body {
 .shadow {
   position: fixed;
   top: 0;
-  /* mobile: top: 7%; */
   left: 0;
   width: 100%;
   height: 100%;
@@ -160,4 +158,24 @@ html, body {
 
 .param-flip {
   transform: rotate(180deg);
+}
+
+@media only screen and (max-width: 800px) {
+  .overlay .popup {
+    height: 80%;
+  }
+
+  .shadow {
+    top: 7%;
+  }
+
+  .overlay .popup .text-scroll-container .text,
+  .overlay .popup .text-scroll-container .links a {
+    font-size: 14px;
+  }
+
+  .info .info-button {
+    margin: 20px 24px;
+    font-size: 18px;
+  }
 }
