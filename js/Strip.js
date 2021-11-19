@@ -19,12 +19,16 @@ class Strip {
 
       texture.repeat.set(1 / width, 1 / imageHeight);
 
+      const meshY = isDesktop ? (0.5 * Strip.AMPLITUDE * stripHeight) : (window.innerHeight - imageHeight);
+
+      mMesh.position.set(0, meshY, -0.005);
+
       mMesh.material.map = texture;
       mMesh.material.needsUpdate = true;
       if (render) render();
     });
 
-    const imageHeight = isDesktop ? 2 * width : 3 * width;
+    const imageHeight = 2 * window.innerHeight;
 
     const mShape = new THREE.Shape();
     mShape.moveTo(0, imageHeight);
@@ -34,8 +38,6 @@ class Strip {
     mShape.lineTo(0, imageHeight);
 
     const mMesh = new THREE.Mesh(new THREE.ShapeGeometry(mShape), new THREE.MeshBasicMaterial());
-
-    mMesh.position.set(0, 0.5 * Strip.AMPLITUDE * stripHeight, -0.005);
 
     return mMesh;
   }
