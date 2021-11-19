@@ -9,8 +9,10 @@ const BY_COLOR = BY_RGB.concat(BY_HLS);
 
 class Strip {
   static getTopMesh(width, stripHeight, render) {
+    const isDesktop = width > Strip.MOBILE_WIDTH;
+
     const mLoader = new THREE.TextureLoader();
-    const tFilename = `./assets/map00.jpg`;
+    const tFilename = `./assets/map00-${isDesktop ? 'desktop' : 'mobile'}.jpg`;
 
     mLoader.load(tFilename, (texture) => {
       const imageHeight = width * texture.image.height / texture.image.width;
@@ -22,12 +24,14 @@ class Strip {
       if (render) render();
     });
 
+    const imageHeight = isDesktop ? 2 * width : 3 * width;
+
     const mShape = new THREE.Shape();
-    mShape.moveTo(0, 2 * width);
-    mShape.lineTo(width, 2 * width);
+    mShape.moveTo(0, imageHeight);
+    mShape.lineTo(width, imageHeight);
     mShape.lineTo(width, 0);
     mShape.lineTo(0, 0);
-    mShape.lineTo(0, 2 * width);
+    mShape.lineTo(0, imageHeight);
 
     const mMesh = new THREE.Mesh(new THREE.ShapeGeometry(mShape), new THREE.MeshBasicMaterial());
 
@@ -106,13 +110,15 @@ class Strip {
 // Strip.NOISE = new SimplexNoise(new Date());
 Strip.NOISE = new SimplexNoise('infinitum');
 
+Strip.MOBILE_WIDTH = 800;
+
 Strip.NUM_POINTS_X = 256.0;
 
 // amp: 0.6 - (1.0)
 Strip.AMPLITUDE = 0.7;
 
 // x-diversity: 200 - (160)
-Strip.DIVERSITY_X = 180.0;
+Strip.DIVERSITY_X = (window.innerWidth > Strip.MOBILE_WIDTH) ? 180.0 : 90.0;
 
 Strip.DIVERSITY_X_HIGH_FACTOR = 4.0;
 Strip.DIVERSITY_X_HIGH_AMP = 0.2;

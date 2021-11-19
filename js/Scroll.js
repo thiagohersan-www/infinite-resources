@@ -42,7 +42,7 @@ class Scroll {
 }
 
 Scroll.NSTRIPS_TOTAL = 100;
-Scroll.NSTRIPS_ONSCREEN = 7;
+Scroll.NSTRIPS_ONSCREEN = (window.innerWidth > Strip.MOBILE_WIDTH) ? 7 : 9;
 Scroll.STRIP_HEIGHT = window.innerHeight / Scroll.NSTRIPS_ONSCREEN;
 
 export { Scroll };
