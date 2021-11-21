@@ -9,7 +9,7 @@ const BY_COLOR = BY_RGB.concat(BY_HLS);
 
 class Strip {
   static getTopMesh(width, stripHeight, render) {
-    const isDesktop = width > Strip.MOBILE_WIDTH;
+    const isDesktop = (width > Strip.MOBILE_WIDTH) && (width > window.innerHeight);
 
     const mLoader = new THREE.TextureLoader();
     const tFilename = `./assets/map00-${isDesktop ? 'desktop' : 'mobile'}.jpg`;
@@ -46,6 +46,8 @@ class Strip {
     if (yidx === 0) {
       return Strip.getTopMesh(width, height, render);
     }
+
+    const fullWidth = (width * window.devicePixelRatio > Strip.MOBILE_WIDTH);
 
     yidx = yidx - 1;
     const mLoader = new THREE.TextureLoader();
