@@ -24,6 +24,11 @@ function setupScene() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
+  // SCROLL
+  document.getElementById('my-scroll-div').style.height = `${15 * window.innerHeight}px`;
+  clearTimeout(previousScrollTimeout);
+  previousScrollTimeout = setTimeout(centerScroll, 1000);
+
   renderer.render(scene, camera);
 }
 
@@ -34,10 +39,6 @@ window.addEventListener('DOMContentLoaded', () => {
   setupScene();
   renderer.domElement.classList.add('my-canvas');
   document.getElementById('my-container').appendChild(renderer.domElement);
-
-  // SCROLL
-  document.getElementById('my-scroll-div').style.height = `${15 * window.innerHeight}px`;
-  setTimeout(centerScroll, 500);
 
   // INFO
   document.getElementById('hide-overlay-button').addEventListener('click', hideOverlay);
