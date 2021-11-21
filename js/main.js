@@ -8,7 +8,13 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(CAM_FOV, window.innerWidth / window.innerHeight, 1, 150);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 
+let currentHeight = window.innerHeight;
 function setupScene() {
+  if (window.innerHeight < currentHeight) return;
+
+  currentHeight = window.innerHeight;
+  document.getElementById('my-shadow-div').style.height = `${window.innerHeight}px`;
+
   const camZ = (window.innerHeight / 2) / Math.tan(CAM_FOV / 2 * Math.PI / 180);
 
   camera.aspect = window.innerWidth / window.innerHeight;
