@@ -129,11 +129,6 @@ html, body {
   pointer-events: none;
 }
 
-.viewport-scroll-bar {
-  display: block;
-  width: 100vw;
-}
-
 /* GUI */
 .menu {
   width: 100%;

@@ -30,11 +30,6 @@ function setupScene() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-  // SCROLL
-  document.getElementById('my-scroll-div').style.height = `${15 * window.innerHeight}px`;
-  clearTimeout(previousScrollTimeout);
-  previousScrollTimeout = setTimeout(centerScroll, 1000);
-
   renderer.render(scene, camera);
 }
 
@@ -55,43 +50,12 @@ window.addEventListener('DOMContentLoaded', () => {
   window.mScroll = new Scroll(scene, () => renderer.render(scene, camera));
 });
 
+const onScrollCommon = (deltaY) => {
+  scene.position.setY(Math.max(LAYERS_Y_OFFSET, scene.position.y + deltaY));
+  renderer.render(scene, camera);
 
-let previousScrollTop = 0;
-let previousScrollTimeout;
-function getScrollTopPosition() {
-  return (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
-}
-
-function centerScroll() {
-  const mScrollDiv = document.getElementById('my-scroll-div');
-
-  const centerTop = (mScrollDiv.offsetHeight - window.innerHeight) / 2;
-
-  window.removeEventListener('scroll', onScroll);
-  window.scrollTo(0, centerTop);
-  setTimeout(() => previousScrollTop = getScrollTopPosition(), 10);
-  setTimeout(() => window.addEventListener('scroll', onScroll), 20);
-}
-
-const onScroll = (event) => {
   const mShadowDiv = document.getElementById('my-shadow-div');
   const mInfoButton = document.getElementById('my-info-button');
-
-  const currentScrollTop = getScrollTopPosition();
-  const deltaY = currentScrollTop - previousScrollTop;
-  previousScrollTop = currentScrollTop;
-
-  if (currentScrollTop < (2 * window.innerHeight) ||
-      currentScrollTop > (13 * window.innerHeight)) {
-    clearTimeout(previousScrollTimeout);
-    centerScroll();
-  } else {
-    clearTimeout(previousScrollTimeout);
-    previousScrollTimeout = setTimeout(centerScroll, 1000);
-  }
-
-  scene.position.setY(Math.max(LAYERS_Y_OFFSET, scene.position.y + deltaY));
-  window.mScroll.update(scene.position.y);
 
   const shadowOpacity = 2 * (scene.position.y - LAYERS_Y_OFFSET) / window.innerHeight;
   const infoOpacity = 1.0 - (2 * (scene.position.y - LAYERS_Y_OFFSET) / window.innerHeight);
@@ -100,22 +64,42 @@ const onScroll = (event) => {
   mInfoButton.style.opacity = Math.max(0, Math.min(1, infoOpacity));
   mInfoButton.style.display = (infoOpacity <= 0) ? 'none' : 'block';
 
-  renderer.render(scene, camera);
+  window.mScroll.update(scene.position.y);
 };
+
+const onScrollDesktop = (event) => {
+  event.preventDefault();
+  const deltaY = event.deltaY;
+  onScrollCommon(deltaY);
+};
+window.addEventListener('wheel', onScrollDesktop, { passive: false });
+
+let touchDownY = null;
+window.addEventListener('touchstart', (event) => {
+  touchDownY = event.touches[0].clientY;
+});
+
+const onScrollMobile = (event) => {
+  event.preventDefault();
+  const deltaY = event.touches[0].clientY - touchDownY;
+  touchDownY = event.touches[0].clientY;
+  onScrollCommon(-deltaY);
+}
+window.addEventListener('touchmove', onScrollMobile, { passive: false });
 
 const hideOverlay = (event) => {
   document.getElementById('my-overlay').style.opacity = 0;
   setTimeout(() => document.getElementById('my-overlay').style.display = 'none', 200);
-  document.getElementById('my-scroll-div').style.display = 'block';
-  centerScroll();
+  window.addEventListener('wheel', onScrollDesktop, { passive: false });
+  window.addEventListener('touchmove', onScrollMobile, { passive: false });
   window.removeEventListener('keyup', checkEscKey);
 };
 
 const showOverlay = (event) => {
   document.getElementById('my-overlay').style.display = 'flex';
   setTimeout(() => document.getElementById('my-overlay').style.opacity = 1, 100);
-  window.removeEventListener('scroll', onScroll);
-  document.getElementById('my-scroll-div').style.display = 'none';
+  window.removeEventListener('wheel', onScrollDesktop);
+  window.removeEventListener('touchmove', onScrollMobile);
   window.addEventListener('keyup', checkEscKey);
 };
 
