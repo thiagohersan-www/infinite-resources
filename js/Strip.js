@@ -52,7 +52,7 @@ class Strip {
 
     yidx = yidx - 1;
     const mLoader = new THREE.TextureLoader();
-    const tFilename = `./assets/textures/${BY_COLOR[(yidx + 0) % BY_COLOR.length]}.jpg`;
+    const tFilename = `./assets/textures/${isFullWidth ? '1920' : '1024'}/${BY_COLOR[(yidx + 0) % BY_COLOR.length]}.jpg`;
 
     mLoader.load(tFilename, (texture) => {
       const shape = {
