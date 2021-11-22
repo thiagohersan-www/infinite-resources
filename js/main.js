@@ -21,7 +21,8 @@ function setupScene() {
   camera.position.set(0, 0, camZ);
   camera.updateProjectionMatrix();
 
-  scene.background = new THREE.Color(0x666666);
+  scene.background = new THREE.Color(0x000000);
+
   scene.position.setX(-window.innerWidth / 2);
   if (window.mScroll === undefined) {
     scene.position.setY(LAYERS_Y_OFFSET);
@@ -32,7 +33,6 @@ function setupScene() {
 
   renderer.render(scene, camera);
 }
-
 window.addEventListener('resize', setupScene);
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -108,3 +108,33 @@ const checkEscKey = (event) => {
     hideOverlay();
   }
 }
+
+const autoScrollSetup = () => {
+  if (scene.position.y < Scroll.STRIP_HEIGHT * Scroll.NSTRIPS_TOTAL) {
+    onScrollCommon(1.5 * Scroll.STRIP_HEIGHT);
+    requestAnimationFrame(autoScrollSetup);
+  } else {
+    onScrollCommon(-1.5 * scene.position.y);
+  }
+};
+
+const autoScroll = () => {
+  onScrollCommon(0.5);
+  requestAnimationFrame(autoScroll);
+};
+
+const checkAnimationKeys = (event) => {
+  if (event.key && (event.key === 'a' || event.key === 'f') && Scroll.NSTRIPS_TOTAL == 100) {
+    document.getElementById('my-info-button').style.transform = 'scale(0)';
+    Scroll.NSTRIPS_TOTAL = 256;
+    window.mScroll = new Scroll(scene, () => renderer.render(scene, camera));
+    window.mScroll.update = (e) => {};
+    setTimeout(autoScrollSetup, 2000);
+    return;
+  }
+
+  if (event.key === 'a') autoScroll();
+  else if (event.key === 'f') autoScrollSetup();
+}
+if (!window.location.href.includes('infinitum'))
+  window.addEventListener('keyup', checkAnimationKeys);
