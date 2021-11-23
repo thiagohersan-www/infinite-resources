@@ -8,6 +8,18 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(CAM_FOV, window.innerWidth / window.innerHeight, 1, 150);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 
+const CAPTURE_TIME_S = 5 * 60;
+const CAPTURE_FRAMERATE = 30;
+
+const capturer = new CCapture({
+  format: 'webm',
+	framerate: CAPTURE_FRAMERATE,
+  verbose: true,
+  name: 'infinitum_30fps_5min',
+  timeLimit: CAPTURE_TIME_S,
+  autoSaveTime: CAPTURE_TIME_S
+} );
+
 let currentHeight = window.innerHeight;
 function setupScene() {
   if (window.innerHeight < currentHeight) return;
@@ -118,9 +130,14 @@ const autoScrollSetup = () => {
   }
 };
 
+let frameCount = 0;
 const autoScroll = () => {
-  onScrollCommon(0.5);
-  requestAnimationFrame(autoScroll);
+  if (frameCount < (CAPTURE_TIME_S * CAPTURE_FRAMERATE)) {
+    onScrollCommon(1);
+    requestAnimationFrame(autoScroll);
+    capturer.capture(renderer.domElement);
+    frameCount++;
+  }
 };
 
 const checkAnimationKeys = (event) => {
@@ -133,7 +150,12 @@ const checkAnimationKeys = (event) => {
     return;
   }
 
-  if (event.key === 'a') autoScroll();
+  if (event.key === 'a') {
+    frameCount = 0;
+    capturer.start();
+    autoScroll();
+  }
+  else if (event.key === 's') capturer.save();
   else if (event.key === 'f') autoScrollSetup();
 }
 if (!window.location.href.includes('infinitum'))
