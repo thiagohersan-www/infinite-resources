@@ -73,6 +73,11 @@ html, body {
   box-sizing: border-box;
 }
 
+.overlay .popup .text-scroll-container .text a,
+.overlay .popup .text-scroll-container .text a:visited {
+  color: #ffffff;
+}
+
 .overlay .popup .text-scroll-container .links {
   width: 100%;
   text-align: center;
