@@ -8,18 +8,6 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(CAM_FOV, window.innerWidth / window.innerHeight, 1, 150);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 
-const CAPTURE_TIME_S = 5 * 60;
-const CAPTURE_FRAMERATE = 30;
-
-const capturer = new CCapture({
-  format: 'webm',
-	framerate: CAPTURE_FRAMERATE,
-  verbose: true,
-  name: 'infinitum_30fps_5min',
-  timeLimit: CAPTURE_TIME_S,
-  autoSaveTime: CAPTURE_TIME_S
-} );
-
 let currentHeight = window.innerHeight;
 function setupScene() {
   if (window.innerHeight < currentHeight) return;
@@ -121,42 +109,64 @@ const checkEscKey = (event) => {
   }
 }
 
-const autoScrollSetup = () => {
-  if (scene.position.y < Scroll.STRIP_HEIGHT * Scroll.NSTRIPS_TOTAL) {
-    onScrollCommon(1.5 * Scroll.STRIP_HEIGHT);
-    requestAnimationFrame(autoScrollSetup);
-  } else {
-    onScrollCommon(-1.5 * scene.position.y);
-  }
-};
+const RUNNING_LOCAL = !window.location.href.includes('infinitum');
 
-let frameCount = 0;
-const autoScroll = () => {
-  if (frameCount < (CAPTURE_TIME_S * CAPTURE_FRAMERATE)) {
-    onScrollCommon(1);
-    requestAnimationFrame(autoScroll);
-    capturer.capture(renderer.domElement);
-    frameCount++;
-  }
-};
+if (RUNNING_LOCAL) {
+  const mCaptureScript = document.createElement('script');
 
-const checkAnimationKeys = (event) => {
-  if (event.key && (event.key === 'a' || event.key === 'f') && Scroll.NSTRIPS_TOTAL == 100) {
-    document.getElementById('my-info-button').style.transform = 'scale(0)';
-    Scroll.NSTRIPS_TOTAL = 256;
-    window.mScroll = new Scroll(scene, () => renderer.render(scene, camera));
-    window.mScroll.update = (e) => {};
-    setTimeout(autoScrollSetup, 2000);
-    return;
-  }
+  mCaptureScript.onload = () => {
+    const CAPTURE_TIME_S = 5 * 60;
+    const CAPTURE_FRAMERATE = 30;
+    let captureFrameCount = 0;
 
-  if (event.key === 'a') {
-    frameCount = 0;
-    capturer.start();
-    autoScroll();
-  }
-  else if (event.key === 's') capturer.save();
-  else if (event.key === 'f') autoScrollSetup();
+    const capturer = new CCapture({
+      format: 'webm',
+      framerate: CAPTURE_FRAMERATE,
+      verbose: true,
+      name: 'infinitum_30fps_5min',
+      timeLimit: CAPTURE_TIME_S,
+      autoSaveTime: CAPTURE_TIME_S
+    });
+
+    const autoScrollSetup = () => {
+      if (scene.position.y < Scroll.STRIP_HEIGHT * Scroll.NSTRIPS_TOTAL) {
+        onScrollCommon(1.5 * Scroll.STRIP_HEIGHT);
+        requestAnimationFrame(autoScrollSetup);
+      } else {
+        onScrollCommon(-1.5 * scene.position.y);
+      }
+    };
+
+    const autoScroll = () => {
+      if (captureFrameCount++ < (CAPTURE_TIME_S * CAPTURE_FRAMERATE)) {
+        onScrollCommon(1);
+        requestAnimationFrame(autoScroll);
+        capturer.capture(renderer.domElement);
+      }
+    };
+
+    const checkAnimationKeys = (event) => {
+      if (event.key && (event.key === 'a' || event.key === 'f') && Scroll.NSTRIPS_TOTAL == 100) {
+        document.getElementById('my-info-button').style.transform = 'scale(0)';
+        Scroll.NSTRIPS_TOTAL = 256;
+        window.mScroll = new Scroll(scene, () => renderer.render(scene, camera));
+        window.mScroll.update = (e) => {};
+        setTimeout(autoScrollSetup, 2000);
+        return;
+      }
+
+      if (event.key === 'a') {
+        captureFrameCount = 0;
+        capturer.start();
+        autoScroll();
+      }
+      else if (event.key === 's') capturer.save();
+      else if (event.key === 'f') autoScrollSetup();
+    }
+
+    window.addEventListener('keyup', checkAnimationKeys);
+  };
+
+  mCaptureScript.src = './js/ccapture/CCapture.all.min.js';
+  document.head.appendChild(mCaptureScript);
 }
-if (!window.location.href.includes('infinitum'))
-  window.addEventListener('keyup', checkAnimationKeys);
