@@ -13,6 +13,7 @@ script:
     - git push th :gh-pages
     - git push mn gh-pages
     - echo "infinitum.thiagohersan.com" > CNAME
-    - git add CNAME
+    - sed -i -e 's/infinitum.marinagem.com/infinitum.thiagohersan.com/g' index.html
+    - git add CNAME index.html
     - git commit -m "updates sites" &> /dev/null
     - git push th gh-pages
