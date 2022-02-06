@@ -12,7 +12,7 @@ class Strip {
     const isHorizontal = (window.innerWidth > window.innerHeight);
 
     const mLoader = new THREE.TextureLoader();
-    const tFilename = `./assets/map00-${isHorizontal ? 'horizontal' : 'vertical'}.jpg`;
+    const tFilename = `./assets/imgs/map00-${isHorizontal ? 'horizontal' : 'vertical'}.jpg`;
 
     mLoader.load(tFilename, (texture) => {
       const imageHeight = width * texture.image.height / texture.image.width;
