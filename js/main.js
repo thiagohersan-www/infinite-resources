@@ -8,6 +8,9 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(CAM_FOV, window.innerWidth / window.innerHeight, 1, 150);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 
+const urlParams = new URLSearchParams(window.location.search);
+const AUTO_SCROLL = urlParams.has('autoScroll');
+
 let currentHeight = window.innerHeight;
 function setupScene() {
   if (window.innerHeight < currentHeight) return;
@@ -48,6 +51,7 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('my-info-button').addEventListener('click', showOverlay);
 
   window.mScroll = new Scroll(scene, () => renderer.render(scene, camera));
+  onScrollCommon(0);
 });
 
 const onScrollCommon = (deltaY) => {
@@ -65,6 +69,10 @@ const onScrollCommon = (deltaY) => {
   mInfoButton.style.display = (infoOpacity <= 0) ? 'none' : 'block';
 
   window.mScroll.update(scene.position.y);
+
+  if (AUTO_SCROLL) {
+    requestAnimationFrame(() => onScrollCommon(1.0));
+  }
 };
 
 const onScrollDesktop = (event) => {
@@ -111,7 +119,7 @@ const checkEscKey = (event) => {
 
 const RUNNING_LOCAL = !window.location.href.includes('infinitum');
 
-if (RUNNING_LOCAL) {
+if (!AUTO_SCROLL && RUNNING_LOCAL) {
   const mCaptureScript = document.createElement('script');
 
   mCaptureScript.onload = () => {
