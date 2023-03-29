@@ -2,6 +2,9 @@ import * as THREE from './three/three.module.js';
 import { Strip } from './Strip.js';
 import { clearObject3D } from './clear.js';
 
+const urlParams = new URLSearchParams(window.location.search);
+const AUTO_SCROLL = urlParams.has('autoScroll');
+
 class Scroll {
   constructor(scene, render) {
     this.scene = scene;
@@ -41,8 +44,8 @@ class Scroll {
   }
 }
 
-Scroll.NSTRIPS_TOTAL = 100;
-Scroll.NSTRIPS_ONSCREEN = 7;
+Scroll.NSTRIPS_TOTAL = AUTO_SCROLL ? 32 : 100;
+Scroll.NSTRIPS_ONSCREEN = AUTO_SCROLL ? 12 : 7;
 Scroll.STRIP_HEIGHT = window.innerHeight / Scroll.NSTRIPS_ONSCREEN;
 
 export { Scroll };

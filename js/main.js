@@ -3,9 +3,11 @@ import { Scroll } from './Scroll.js';
 import { Strip } from './Strip.js';
 
 const CAM_FOV = 150;
+const CAM_FAR_CLIP = 300;
+
 const LAYERS_Y_OFFSET = -window.innerHeight / 2.0 - (Scroll.STRIP_HEIGHT + 0.5 * Strip.AMPLITUDE * Scroll.STRIP_HEIGHT);
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(CAM_FOV, window.innerWidth / window.innerHeight, 1, 150);
+const camera = new THREE.PerspectiveCamera(CAM_FOV, window.innerWidth / window.innerHeight, 1, CAM_FAR_CLIP);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 
 const urlParams = new URLSearchParams(window.location.search);

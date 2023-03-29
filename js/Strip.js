@@ -7,6 +7,9 @@ const BY_RGB = JSON.parse(by_rgb);
 const BY_HLS = JSON.parse(by_hls);
 const BY_COLOR = BY_RGB.concat(BY_HLS);
 
+const urlParams = new URLSearchParams(window.location.search);
+const AUTO_SCROLL = urlParams.has('autoScroll');
+
 class Strip {
   static getTopMesh(width, stripHeight, render) {
     const isHorizontal = (window.innerWidth > window.innerHeight);
@@ -48,7 +51,7 @@ class Strip {
     }
 
     const isFullWidth = (width * window.devicePixelRatio > Strip.MOBILE_WIDTH);
-    const isHorizontal = (window.innerWidth > window.innerHeight);
+    const isHorizontal = (window.innerWidth > window.innerHeight) || AUTO_SCROLL;
 
     yidx = yidx - 1;
     const mLoader = new THREE.TextureLoader();
