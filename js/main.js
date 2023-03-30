@@ -12,6 +12,7 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 
 const urlParams = new URLSearchParams(window.location.search);
 const AUTO_SCROLL = urlParams.has('autoScroll');
+const AUTO_SCROLL_SPEED = parseFloat(urlParams.get('autoScroll')) || 1.0;
 
 let currentHeight = window.innerHeight;
 function setupScene() {
@@ -73,7 +74,7 @@ const onScrollCommon = (deltaY) => {
   window.mScroll.update(scene.position.y);
 
   if (AUTO_SCROLL) {
-    requestAnimationFrame(() => onScrollCommon(1.0));
+    requestAnimationFrame(() => onScrollCommon(AUTO_SCROLL_SPEED));
   }
 };
 
