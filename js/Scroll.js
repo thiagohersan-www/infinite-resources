@@ -44,7 +44,7 @@ class Scroll {
   }
 }
 
-Scroll.NSTRIPS_TOTAL = AUTO_SCROLL ? 32 : 100;
+Scroll.NSTRIPS_TOTAL = AUTO_SCROLL ? 32 : 384;
 Scroll.NSTRIPS_ONSCREEN = AUTO_SCROLL ? 12 : 7;
 Scroll.STRIP_HEIGHT = window.innerHeight / Scroll.NSTRIPS_ONSCREEN;
 
