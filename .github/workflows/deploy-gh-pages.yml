@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GHTOKEN: ${{ secrets.PUSH_TOKEN }}
-      GHCOMMIT: 
 
     steps:
       - name: Checkout
