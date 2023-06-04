@@ -37,9 +37,8 @@ jobs:
           echo "infinitum.marinagem.com" > CNAME
           git add assets/ css/ js/ index.html CNAME
           git commit -m "updates sites" &> /dev/null
-        # foo: |
-        #   git push mn :gh-pages
-        #   git push mn gh-pages
+          git push mn :gh-pages
+          git push mn gh-pages
 
       - name: Deploy TH
         run: |
