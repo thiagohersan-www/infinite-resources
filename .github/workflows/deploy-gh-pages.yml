@@ -24,8 +24,8 @@ jobs:
           echo "infinitum.marinagem.com" > CNAME
           git rm --cached -rf . &> /dev/null
           git add assets/ css/ js/ index.html CNAME
-          git commit -m "updates sites" &> /dev/null
         # foo: |
+        #   git commit -m "updates sites" &> /dev/null
         #   git push mn :gh-pages
         #   git push mn gh-pages
 
@@ -35,7 +35,7 @@ jobs:
           echo "infinitum.thiagohersan.com" > CNAME
           sed -i -e 's/infinitum.marinagem.com/infinitum.thiagohersan.com/g' index.html
           git add CNAME index.html
-          git commit -m "updates sites" &> /dev/null
         # foo: |
+        #   git commit -m "updates sites" &> /dev/null
         #   git push th :gh-pages
         #   git push th gh-pages
