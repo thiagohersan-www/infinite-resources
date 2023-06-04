@@ -1,0 +1,39 @@
+name: deploy gh-pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      GHTOKEN: ${{ secrets.PUSH_TOKEN }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+        with:
+          persist-credentials: false
+
+      - name: Deploy MN
+        run: |
+          git remote add mn https://thiagohersan:$GHTOKEN@github.com/marinagem-www/infinitum.marinagem.com.git
+          git checkout --orphan gh-pages
+          git rm --cached -r . &> /dev/null
+          echo "infinitum.marinagem.com" > CNAME
+          git add assets/ css/ js/ index.html CNAME
+          git commit -m "updates sites" &> /dev/null
+          git push mn :gh-pages
+          git push mn gh-pages
+
+      - name: Deploy TH
+        run: |
+          git remote add th https://thiagohersan:$GHTOKEN@github.com/thiagohersan-www/infinitum.thiagohersan.com.git
+          echo "infinitum.thiagohersan.com" > CNAME
+          sed -i -e 's/infinitum.marinagem.com/infinitum.thiagohersan.com/g' index.html
+          git add CNAME index.html
+          git commit -m "updates sites" &> /dev/null
+          git push th :gh-pages
+          git push th gh-pages
