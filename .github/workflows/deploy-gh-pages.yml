@@ -22,8 +22,9 @@ jobs:
           git remote add mn https://thiagohersan:$GHTOKEN@github.com/marinagem-www/infinitum.marinagem.com.git
           git checkout --orphan gh-pages
           echo "infinitum.marinagem.com" > CNAME
+          git rm --cached -rf .
         # foo: |
-        #   git rm --cached -r . &> /dev/null
+        #   
         #   git add assets/ css/ js/ index.html CNAME
         #   git commit -m "updates sites" &> /dev/null
         #   git push mn :gh-pages
