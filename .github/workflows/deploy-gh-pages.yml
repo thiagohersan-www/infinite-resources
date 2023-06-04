@@ -17,36 +17,29 @@ jobs:
         with:
           persist-credentials: false
 
-      # - name: Setup git
-      #   run: |
-      #     git remote add mn https://thiagohersan:$GHTOKEN@github.com/marinagem-www/infinitum.marinagem.com.git
-      #     git remote add th https://thiagohersan:$GHTOKEN@github.com/thiagohersan-www/infinitum.thiagohersan.com.git
-      #     git config --local user.name "github-actions"
-      #     git config --local user.email "github-actions@users.noreply.github.com"
-      #     git checkout --orphan gh-pages
-      #     git rm --cached -rf . &> /dev/null
-
-
-      - name: Deploy MN
+      - name: Setup git
         run: |
           git remote add mn https://thiagohersan:$GHTOKEN@github.com/marinagem-www/infinitum.marinagem.com.git
+          git remote add th https://thiagohersan:$GHTOKEN@github.com/thiagohersan-www/infinitum.thiagohersan.com.git
           git config --local user.name "github-actions"
           git config --local user.email "github-actions@users.noreply.github.com"
           git checkout --orphan gh-pages
           git rm --cached -rf . &> /dev/null
+
+
+      - name: Deploy MN
+        run: |
           echo "infinitum.marinagem.com" > CNAME
           git add assets/ css/ js/ index.html CNAME
-          git commit -m "updates sites" &> /dev/null
+          git commit -m "update site" &> /dev/null
           git push mn :gh-pages
           git push mn gh-pages
 
       - name: Deploy TH
         run: |
-          git remote add th https://thiagohersan:$GHTOKEN@github.com/thiagohersan-www/infinitum.thiagohersan.com.git
           echo "infinitum.thiagohersan.com" > CNAME
           sed -i -e 's/infinitum.marinagem.com/infinitum.thiagohersan.com/g' index.html
           git add CNAME index.html
-        # foo: |
-        #   git commit -m "updates sites" &> /dev/null
-        #   git push th :gh-pages
-        #   git push th gh-pages
+          git commit -m "update site" &> /dev/null
+          git push th :gh-pages
+          git push th gh-pages
