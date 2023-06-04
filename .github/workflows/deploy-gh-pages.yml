@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GHTOKEN: ${{ secrets.PUSH_TOKEN }}
+      GHCOMMIT: 
 
     steps:
       - name: Checkout
@@ -25,13 +26,13 @@ jobs:
           git config --local user.email "github-actions@users.noreply.github.com"
           git checkout --orphan gh-pages
           git rm --cached -rf . &> /dev/null
-
+          echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV
 
       - name: Deploy MN
         run: |
           echo "infinitum.marinagem.com" > CNAME
           git add assets/ css/ js/ index.html CNAME
-          git commit -m "update site" &> /dev/null
+          git commit -m "update site: $GITHUB_SHA_SHORT" &> /dev/null
           git push mn :gh-pages
           git push mn gh-pages
 
@@ -40,6 +41,6 @@ jobs:
           echo "infinitum.thiagohersan.com" > CNAME
           sed -i -e 's/infinitum.marinagem.com/infinitum.thiagohersan.com/g' index.html
           git add CNAME index.html
-          git commit -m "update site" &> /dev/null
+          git commit -m "update site: $GITHUB_SHA_SHORT" &> /dev/null
           git push th :gh-pages
           git push th gh-pages
