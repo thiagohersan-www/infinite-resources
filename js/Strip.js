@@ -1,3 +1,4 @@
+import SimplexNoise from './simplex-noise/simplex-noise.js';
 import { by_rgb } from './by_rgb.js';
 import { by_hls } from './by_hls.js';
 
@@ -9,13 +10,14 @@ const urlParams = new URLSearchParams(window.location.search);
 const AUTO_SCROLL = urlParams.has("autoScroll");
 
 class Strip {
-  static createSvgElement(i, w, h, imgFile) {
+  static createSvgElement(i, width, svgH, imgH, imgFile) {
+    const offsetY = (imgH - svgH) / 2;
     const el = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     el.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
     el.id = `mylayer${i}`;
     el.classList.add("layer");
-    el.style.height = `${h}px`;
-    el.innerHTML = `<defs><pattern id="img${i}" patternUnits="userSpaceOnUse" width="${w}px" height="${h}px"><image href="${imgFile}" x="0" y="0" width="${w}px" height="${h}px" /></pattern></defs>`;
+    el.style.height = `${svgH}px`;
+    el.innerHTML = `<defs><pattern id="img${i}" patternUnits="userSpaceOnUse" width="${width}px" height="${imgH}px" x="0" y="-${offsetY}"><image href="${imgFile}" x="0" y="0" width="${width}px" height="${imgH}px" /></pattern></defs>`;
     return el;
   }
 
@@ -27,7 +29,7 @@ class Strip {
     const aspectRatio = imgWidth / imgHeight;
     const height = width / aspectRatio;
 
-    const el = Strip.createSvgElement(0, width, height, imgFile);
+    const el = Strip.createSvgElement(0, width, height, height, imgFile);
     const elPath = `<path d="M0,0 L0,${height} L${width},${height} L${width},0 z" fill="url(#img0)"></path>`;
     el.innerHTML = el.innerHTML + " " + elPath;
 
@@ -47,36 +49,35 @@ class Strip {
     const diversityX = isHorizontal ? Strip.DIVERSITY_X : 0.5 * Strip.DIVERSITY_X;
     const deltaX = width / numPointsX;
 
-    // TODO: create SVG path
+    let pathString = `M0,${height}`;
     for (let i = 0; i <= numPointsX; i++) {
       const x = i * deltaX;
+      const y_noise = Strip.NOISE.noise2D(x / diversityX, yidx0 / Strip.DIVERSITY_Y);
+      const y_noise_h = Strip.NOISE.noise2D(Strip.DIVERSITY_X_HIGH_FACTOR * x / diversityX, yidx0 / Strip.DIVERSITY_Y);
 
-      // TODO: LX,Y
-      // const y_noise = Strip.NOISE.noise2D(x / diversityX, yidx0 / Strip.DIVERSITY_Y);
-      // const y_noise_h = Strip.NOISE.noise2D(Strip.DIVERSITY_X_HIGH_FACTOR * x / diversityX, yidx0 / Strip.DIVERSITY_Y);
-
-      // const firstLayerDamp = (yidx0 === 0) ? 0.5 : 1.0;
-      // const y = firstLayerDamp * height * Strip.AMPLITUDE * (y_noise + Strip.DIVERSITY_X_HIGH_AMP * y_noise_h);
+      const y = height * Strip.AMPLITUDE * (y_noise + Strip.DIVERSITY_X_HIGH_AMP * y_noise_h);
+      pathString += ` L${x},${height + y}`;
     }
 
     for (let i = 0; i <= numPointsX; i++) {
       const x = width - i * deltaX;
+      const y_noise = Strip.NOISE.noise2D(x / diversityX, (yidx0 + 1) / Strip.DIVERSITY_Y);
+      const y_noise_h = Strip.NOISE.noise2D(Strip.DIVERSITY_X_HIGH_FACTOR * x / diversityX, (yidx0 + 1) / Strip.DIVERSITY_Y);
 
-      // TODO: LX,Y
-      // const y_noise = Strip.NOISE.noise2D(x / diversityX, (yidx0 + 1) / Strip.DIVERSITY_Y);
-      // const y_noise_h = Strip.NOISE.noise2D(Strip.DIVERSITY_X_HIGH_FACTOR * x / diversityX, (yidx0 + 1) / Strip.DIVERSITY_Y);
-
-      // const y = height * Strip.AMPLITUDE * (y_noise + Strip.DIVERSITY_X_HIGH_AMP * y_noise_h);
+      const firstLayerDamp = (yidx0 === 0) ? 0.0 : 1.0;
+      const y = firstLayerDamp * height * Strip.AMPLITUDE * (y_noise + Strip.DIVERSITY_X_HIGH_AMP * y_noise_h);
+      pathString += ` L${x},${y}`;
     }
+    pathString += ` L0,${height} z`;
 
     const imgFile = `assets/textures/${isFullWidth ? '1920' : '1024'}/${BY_COLOR[yidx0 % BY_COLOR.length]}.jpg`
     const imgWidth = isFullWidth ? 1920.0 : 1024.0;
     const imgHeight = isFullWidth ? 640.0 : 342.0;
     const aspectRatio = imgWidth / imgHeight;
-    const lHeight = width / aspectRatio;
+    pathString = `M0,0 L0,${height} L${width},${height} L${width},0 z`;
 
-    const el = Strip.createSvgElement(yidx, width, lHeight, imgFile);
-    const elPath = `<path d="M0,0 L0,${lHeight} L${width},${lHeight} L${width},0 z" fill="url(#img${yidx})"></path>`;
+    const el = Strip.createSvgElement(yidx, width, height, width / aspectRatio, imgFile);
+    const elPath = `<path d="${pathString}" fill="url(#img${yidx})"></path>`;
     el.innerHTML = el.innerHTML + " " + elPath;
 
     return el;
@@ -84,7 +85,7 @@ class Strip {
 }
 
 // Strip.NOISE = new SimplexNoise(new Date());
-// Strip.NOISE = new SimplexNoise("infinitum");
+Strip.NOISE = new SimplexNoise("infinitum");
 
 Strip.MOBILE_WIDTH = 1090;
 
@@ -101,7 +102,5 @@ Strip.DIVERSITY_X_HIGH_AMP = 0.2;
 
 // y-diversity: 45 - (20)
 Strip.DIVERSITY_Y = 20.0;
-
-Strip.SPACER = 0;
 
 export { Strip };
