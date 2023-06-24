@@ -55,8 +55,9 @@ class Strip {
       const y_noise = Strip.NOISE.noise2D(x / diversityX, yidx0 / Strip.DIVERSITY_Y);
       const y_noise_h = Strip.NOISE.noise2D(Strip.DIVERSITY_X_HIGH_FACTOR * x / diversityX, yidx0 / Strip.DIVERSITY_Y);
 
-      const y = height * Strip.AMPLITUDE * (y_noise + Strip.DIVERSITY_X_HIGH_AMP * y_noise_h);
-      pathString += ` L${x},${height + y}`;
+      const firstLayerDamp = (yidx0 === 0) ? 0.5 : 1.0;
+      const y = firstLayerDamp * height * Strip.AMPLITUDE * (y_noise + Strip.DIVERSITY_X_HIGH_AMP * y_noise_h);
+      pathString += ` L${x},${y}`;
     }
 
     for (let i = 0; i <= numPointsX; i++) {
@@ -64,9 +65,8 @@ class Strip {
       const y_noise = Strip.NOISE.noise2D(x / diversityX, (yidx0 + 1) / Strip.DIVERSITY_Y);
       const y_noise_h = Strip.NOISE.noise2D(Strip.DIVERSITY_X_HIGH_FACTOR * x / diversityX, (yidx0 + 1) / Strip.DIVERSITY_Y);
 
-      const firstLayerDamp = (yidx0 === 0) ? 0.0 : 1.0;
-      const y = firstLayerDamp * height * Strip.AMPLITUDE * (y_noise + Strip.DIVERSITY_X_HIGH_AMP * y_noise_h);
-      pathString += ` L${x},${y}`;
+      const y = height * Strip.AMPLITUDE * (y_noise + Strip.DIVERSITY_X_HIGH_AMP * y_noise_h);
+      pathString += ` L${x},${height + y}`;
     }
     pathString += ` L0,${height} z`;
 
@@ -74,7 +74,6 @@ class Strip {
     const imgWidth = isFullWidth ? 1920.0 : 1024.0;
     const imgHeight = isFullWidth ? 640.0 : 342.0;
     const aspectRatio = imgWidth / imgHeight;
-    pathString = `M0,0 L0,${height} L${width},${height} L${width},0 z`;
 
     const el = Strip.createSvgElement(yidx, width, height, width / aspectRatio, imgFile);
     const elPath = `<path d="${pathString}" fill="url(#img${yidx})"></path>`;
