@@ -7,7 +7,9 @@ const urlParams = new URLSearchParams(window.location.search);
 const AUTO_SCROLL = urlParams.has("autoScroll");
 const AUTO_SCROLL_SPEED = parseFloat(urlParams.get("autoScroll")) || 1.0;
 
+// TODO: add this as padding/margin to hide layers
 const LAYERS_Y_OFFSET = () => {
+  return 0;
   return window.innerHeight / 2.0 - (Scroll.STRIP_HEIGHT + 0.5 * Strip.AMPLITUDE * Scroll.STRIP_HEIGHT);
 };
 

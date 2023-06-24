@@ -1,43 +1,61 @@
+import { by_rgb } from './by_rgb.js';
+import { by_hls } from './by_hls.js';
+
+const BY_RGB = JSON.parse(by_rgb);
+const BY_HLS = JSON.parse(by_hls);
+const BY_COLOR = BY_RGB.concat(BY_HLS);
+
 const urlParams = new URLSearchParams(window.location.search);
 const AUTO_SCROLL = urlParams.has("autoScroll");
 
 class Strip {
-  static fakeEl(i, h) {
-    const el = document.createElement("svg");
-    el.innerHTML = `${i}`;
+  static createSvgElement(i, w, h, imgFile) {
+    const el = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    el.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
+    el.id = `mylayer${i}`;
     el.classList.add("layer");
     el.style.height = `${h}px`;
+    el.innerHTML = `<defs><pattern id="img${i}" patternUnits="userSpaceOnUse" width="${w}px" height="${h}px"><image href="${imgFile}" x="0" y="0" width="${w}px" height="${h}px" /></pattern></defs>`;
     return el;
   }
 
-  static getTopLayer(width, stripHeight) {
+  static getTopLayer(width) {
     const isHorizontal = window.innerWidth > window.innerHeight;
-    // TODO: load mountain image
-    return Strip.fakeEl(0, stripHeight);
+    const imgFile = `assets/imgs/map00-${isHorizontal ? "horizontal" : "vertical"}.jpg`;
+    const imgWidth = isHorizontal ? 1920.0 : 1080.0;
+    const imgHeight = isHorizontal ? 1300.0 : 2160.0;
+    const aspectRatio = imgWidth / imgHeight;
+    const height = width / aspectRatio;
+
+    const el = Strip.createSvgElement(0, width, height, imgFile);
+    const elPath = `<path d="M0,0 L0,${height} L${width},${height} L${width},0 z" fill="url(#img0)"></path>`;
+    el.innerHTML = el.innerHTML + " " + elPath;
+
+    return el;
   }
 
   static getLayer(width, height, yidx) {
     if (yidx === 0) {
-      return Strip.getTopLayer(width, height);
+      return Strip.getTopLayer(width);
     }
 
     const isFullWidth = width * window.devicePixelRatio > Strip.MOBILE_WIDTH;
     const isHorizontal = window.innerWidth > window.innerHeight || AUTO_SCROLL;
 
-    yidx = yidx - 1;
+    const yidx0 = yidx - 1;
     const numPointsX = isFullWidth ? Strip.NUM_POINTS_X : 0.5 * Strip.NUM_POINTS_X;
     const diversityX = isHorizontal ? Strip.DIVERSITY_X : 0.5 * Strip.DIVERSITY_X;
     const deltaX = width / numPointsX;
 
-    // TODO: create SVG with image pattern
+    // TODO: create SVG path
     for (let i = 0; i <= numPointsX; i++) {
       const x = i * deltaX;
 
       // TODO: LX,Y
-      // const y_noise = Strip.NOISE.noise2D(x / diversityX, yidx / Strip.DIVERSITY_Y);
-      // const y_noise_h = Strip.NOISE.noise2D(Strip.DIVERSITY_X_HIGH_FACTOR * x / diversityX, yidx / Strip.DIVERSITY_Y);
+      // const y_noise = Strip.NOISE.noise2D(x / diversityX, yidx0 / Strip.DIVERSITY_Y);
+      // const y_noise_h = Strip.NOISE.noise2D(Strip.DIVERSITY_X_HIGH_FACTOR * x / diversityX, yidx0 / Strip.DIVERSITY_Y);
 
-      // const firstLayerDamp = (yidx === 0) ? 0.5 : 1.0;
+      // const firstLayerDamp = (yidx0 === 0) ? 0.5 : 1.0;
       // const y = firstLayerDamp * height * Strip.AMPLITUDE * (y_noise + Strip.DIVERSITY_X_HIGH_AMP * y_noise_h);
     }
 
@@ -45,13 +63,23 @@ class Strip {
       const x = width - i * deltaX;
 
       // TODO: LX,Y
-      // const y_noise = Strip.NOISE.noise2D(x / diversityX, (yidx + 1) / Strip.DIVERSITY_Y);
-      // const y_noise_h = Strip.NOISE.noise2D(Strip.DIVERSITY_X_HIGH_FACTOR * x / diversityX, (yidx + 1) / Strip.DIVERSITY_Y);
+      // const y_noise = Strip.NOISE.noise2D(x / diversityX, (yidx0 + 1) / Strip.DIVERSITY_Y);
+      // const y_noise_h = Strip.NOISE.noise2D(Strip.DIVERSITY_X_HIGH_FACTOR * x / diversityX, (yidx0 + 1) / Strip.DIVERSITY_Y);
 
       // const y = height * Strip.AMPLITUDE * (y_noise + Strip.DIVERSITY_X_HIGH_AMP * y_noise_h);
     }
 
-    return Strip.fakeEl(yidx + 1, height);
+    const imgFile = `assets/textures/${isFullWidth ? '1920' : '1024'}/${BY_COLOR[yidx0 % BY_COLOR.length]}.jpg`
+    const imgWidth = isFullWidth ? 1920.0 : 1024.0;
+    const imgHeight = isFullWidth ? 640.0 : 342.0;
+    const aspectRatio = imgWidth / imgHeight;
+    const lHeight = width / aspectRatio;
+
+    const el = Strip.createSvgElement(yidx, width, lHeight, imgFile);
+    const elPath = `<path d="M0,0 L0,${lHeight} L${width},${lHeight} L${width},0 z" fill="url(#img${yidx})"></path>`;
+    el.innerHTML = el.innerHTML + " " + elPath;
+
+    return el;
   }
 }
 
