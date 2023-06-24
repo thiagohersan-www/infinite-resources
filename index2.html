@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <title>Infinitum</title>
+
+    <meta charset="UTF-8">
+    <meta name="description" content="Infinitum draws a link between our insatiable consumption of social media and the anthropocentric perspective which interprets terrestrial resources as infinite">
+    <meta name="keywords" content="art, arte, Mari, Nagem, Marinagem, Thiago Hersan, Hersan, infinite, scroll, extractivism">
+
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; media-src 'self'; script-src 'self'; font-src 'self'; style-src 'self' 'unsafe-inline'; base-uri 'self';">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="shortcut icon" type="image/x-icon" href="./assets/imgs/favicon.ico">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="infinitum.marinagem.com">
+    <meta property="twitter:url" content="https://infinitum.marinagem.com/">
+    <meta name="twitter:title" content="">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:image" content="https://infinitum.marinagem.com/assets/imgs/cover-1024.jpg">
+
+    <meta property="og:url" content="https://infinitum.marinagem.com/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="">
+    <meta property="og:description" content="">
+    <meta property="og:image" content="https://infinitum.marinagem.com/assets/imgs/cover-1200.jpg">
+
+    <style>
+      html, body {
+        padding: 0;
+        margin: 0;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 800px;
+        background-color: #f0f;
+      }
+      .layer {
+        display: block;
+        width: 100%;
+        height: 200px;
+        overflow: initial;
+      }
+      .layer.hide {
+        position: absolute;
+        top: -1000px;
+      }
+    </style>
+    <script src="./js/index2.js"></script>
+
+  </head>
+  <body>
+    <svg class="layer hide" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="img0" patternUnits="userSpaceOnUse" width="100%" height="300px">
+          <image href="/assets/textures/1920/MUMI-001-1.jpg" x="0" y="0" width="900px" height="300px" />
+        </pattern>
+        <pattern id="img1" patternUnits="userSpaceOnUse" x="0" y="-50" width="100%" height="300px">
+          <image href="/assets/textures/1920/MUMI-002-1.jpg" x="0" y="0" width="900px" height="300px" />
+        </pattern>
+        <pattern id="img2" patternUnits="userSpaceOnUse" x="0" y="-50" width="100%" height="300px">
+          <image href="/assets/textures/1920/MUMI-003-2.jpg" x="0" y="0" width="900px" height="300px" />
+        </pattern>
+      </defs>
+    </svg>
+    
+    <div class="container" id="mycontainer">
+      <svg id="mylayer0" class="layer" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,0
+          L0,200
+          L100,190 L200,230 L300,180 L400,170 L500,200 L600,170 L700,190 L800,200
+          L800,0 z"
+          fill="url(#img0)">
+        </path>
+      </svg>
+    
+      <svg id="mylayer1" class="layer" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,0
+          L100,-10 L200,30 L300,-20 L400,-30 L500,0 L600,-30 L700,-10 L800,0
+          L800,200
+          L700,210 L600,230 L500,200 L400,230 L300,180 L200,170 L100,210
+          L0,200 z"
+          fill="url(#img1)">
+        </path>
+      </svg>
+    
+      <svg id="mylayer2" class="layer" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,0
+          L100,10 L200,-30 L300,-20 L400,30 L500,0 L600,30 L700,10 L800,0
+          L800,200
+          L700,190 L600,170 L500,200 L400,170 L300,180 L200,230 L100,190
+          L0,200 z"
+          fill="url(#img2)">
+        </path>
+      </svg>
+    </div>
+  </body>
+</html>
