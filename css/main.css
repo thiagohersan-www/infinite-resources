@@ -88,9 +88,6 @@ html, body {
 }
 
 .container {
-  position: fixed;
-  top: 0;
-  left: 0;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -130,20 +127,14 @@ html, body {
   opacity: 0;
 }
 
-.my-canvas {
-  pointer-events: none;
-}
-
 .layer {
   display: block;
   width: 100%;
-  height: 200px;
   overflow: initial;
 }
 
-.layer.hide {
-  position: absolute;
-  top: -1000px;
+.layer-container {
+  width: 100%;
 }
 
 @media only screen and (max-width: 800px) {

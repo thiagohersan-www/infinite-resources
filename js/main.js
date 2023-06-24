@@ -1,11 +1,12 @@
-// import { Scroll } from './Scroll.js';
-// import { Strip } from './Strip.js';
+import { Scene } from './Scene.js';
+import { Scroll } from './Scroll.js';
+import { Strip } from './Strip.js';
 
 const urlParams = new URLSearchParams(window.location.search);
 const AUTO_SCROLL = urlParams.has('autoScroll');
 const AUTO_SCROLL_SPEED = parseFloat(urlParams.get('autoScroll')) || 1.0;
 
-// const LAYERS_Y_OFFSET = -window.innerHeight / 2.0 - (Scroll.STRIP_HEIGHT + 0.5 * Strip.AMPLITUDE * Scroll.STRIP_HEIGHT);
+const LAYERS_Y_OFFSET = -window.innerHeight / 2.0 - (Scroll.STRIP_HEIGHT + 0.5 * Strip.AMPLITUDE * Scroll.STRIP_HEIGHT);
 
 let currentHeight = window.innerHeight;
 const setupScene = () => {
@@ -23,7 +24,6 @@ const setupScene = () => {
 window.addEventListener('resize', setupScene);
 
 window.addEventListener('DOMContentLoaded', () => {
-  // THREEJS
   setupScene();
 
   // INFO
@@ -32,8 +32,8 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('my-overlay').addEventListener('click', hideOverlay);
   document.getElementById('my-info-button').addEventListener('click', showOverlay);
 
-  // TODO:
-  // window.mScroll = new Scroll(scene, () => renderer.render(scene, camera));
+  window.mScene = new Scene();
+  window.mScroll = new Scroll(window.mScene);
   onScrollCommon(0);
 });
 
@@ -87,7 +87,7 @@ const onScrollDesktop = (event) => {
   const deltaY = event.deltaY;
   onScrollCommon(deltaY);
 };
-window.addEventListener('wheel', onScrollDesktop, { passive: false });
+// window.addEventListener('wheel', onScrollDesktop, { passive: false });
 
 let touchDownY = null;
 window.addEventListener('touchstart', (event) => {
@@ -100,4 +100,4 @@ const onScrollMobile = (event) => {
   touchDownY = event.touches[0].clientY;
   onScrollCommon(-deltaY);
 }
-window.addEventListener('touchmove', onScrollMobile, { passive: false });
+// window.addEventListener('touchmove', onScrollMobile, { passive: false });
