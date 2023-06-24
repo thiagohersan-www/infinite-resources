@@ -13,6 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="shortcut icon" type="image/x-icon" href="./assets/imgs/favicon.ico">
+    <link rel="stylesheet" href="./css/main.css">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta property="twitter:domain" content="infinitum.marinagem.com">
@@ -27,32 +28,32 @@
     <meta property="og:description" content="">
     <meta property="og:image" content="https://infinitum.marinagem.com/assets/imgs/cover-1200.jpg">
 
-    <style>
-      html, body {
-        padding: 0;
-        margin: 0;
-      }
-
-      .container {
-        width: 100%;
-        max-width: 800px;
-        background-color: #f0f;
-      }
-      .layer {
-        display: block;
-        width: 100%;
-        height: 200px;
-        overflow: initial;
-      }
-      .layer.hide {
-        position: absolute;
-        top: -1000px;
-      }
-    </style>
-    <script src="./js/index2.js"></script>
+    <script type="module" src="./js/main.js"></script>
 
   </head>
   <body>
+    <div id="my-overlay" class="overlay">
+      <div id="my-popup" class="popup">
+        <div id="hide-overlay-button" class="button">X</div>
+        <div class="text-scroll-container">
+          <div class="text">
+            <i>Infinitum</i> draws a link between our insatiable consumption of social media and the anthropocentric perspective which interprets terrestrial resources (and increasingly, cosmological resources) as infinite, exploiting them immeasurably. A concrete rock forms a mountain, while underground different minerals become layers of time in an infinite scroll. In search of instant satisfaction, despite all the mundane textures, we dig with our fingers into a database of smooth and endless atmosphere.
+            <br><br>
+            Developed by Mari Nagem and Thiago Hersan, during the artistic residency ComCiência, from the Museum of Mines and Metals in Belo Horizonte, MG, Brazil. 2021.
+            <div class="links">&#8212;</div>
+            <i>Infinitum</i> parte da concepção antropocêntrica integrada à nossa relação com as redes sociais, que interpreta os recursos terrestres e cada vez mais os recursos cosmológicos como infinitos; explorando-os incomensuravelmente. Uma rocha de concreto desenha uma montanha, enquanto que abaixo do solo os diferentes minerais registrados se tornam camadas de tempo em um scroll infinito. Na busca de satisfações instantâneas, apesar de toda a textura mundana, cava-se com os dedos um banco de dados de atmosfera lisa e sem-fim.
+            <br><br>
+            Desenvolvido por Mari Nagem e Thiago Hersan, durante a residência ComCiência, do Museu das Minas e do Metal em Belo Horizonte, MG, Brasil. 2021.
+          </div>
+          <div class="links">
+            <br>
+            <a href="https://marinagem.com" target="_blank">marinagem.com</a> |
+            <a href="https://thiagohersan.com" target="_blank">thiagohersan.com</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <svg class="layer hide" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <pattern id="img0" patternUnits="userSpaceOnUse" width="100%" height="300px">
@@ -66,36 +67,44 @@
         </pattern>
       </defs>
     </svg>
-    
-    <div class="container" id="mycontainer">
-      <svg id="mylayer0" class="layer" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0,0
-          L0,200
-          L100,190 L200,230 L300,180 L400,170 L500,200 L600,170 L700,190 L800,200
-          L800,0 z"
-          fill="url(#img0)">
-        </path>
-      </svg>
-    
-      <svg id="mylayer1" class="layer" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0,0
-          L100,-10 L200,30 L300,-20 L400,-30 L500,0 L600,-30 L700,-10 L800,0
-          L800,200
-          L700,210 L600,230 L500,200 L400,230 L300,180 L200,170 L100,210
-          L0,200 z"
-          fill="url(#img1)">
-        </path>
-      </svg>
-    
-      <svg id="mylayer2" class="layer" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0,0
-          L100,10 L200,-30 L300,-20 L400,30 L500,0 L600,30 L700,10 L800,0
-          L800,200
-          L700,190 L600,170 L500,200 L400,170 L300,180 L200,230 L100,190
-          L0,200 z"
-          fill="url(#img2)">
-        </path>
-      </svg>
+
+    <div class="container" id="my-container">
+      <div class="info">
+        <div id="my-info-button" class="info-button">info</div>
+      </div>
+
+      <div id="my-shadow-div" class="shadow"></div>
+
+      <div class="layer-container">
+        <svg id="mylayer0" class="layer" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,0
+            L0,200
+            L100,190 L200,230 L300,180 L400,170 L500,200 L600,170 L700,190 L800,200
+            L800,0 z"
+            fill="url(#img0)">
+          </path>
+        </svg>
+
+        <svg id="mylayer1" class="layer" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,0
+            L100,-10 L200,30 L300,-20 L400,-30 L500,0 L600,-30 L700,-10 L800,0
+            L800,200
+            L700,210 L600,230 L500,200 L400,230 L300,180 L200,170 L100,210
+            L0,200 z"
+            fill="url(#img1)">
+          </path>
+        </svg>
+
+        <svg id="mylayer2" class="layer" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,0
+            L100,10 L200,-30 L300,-20 L400,30 L500,0 L600,30 L700,10 L800,0
+            L800,200
+            L700,190 L600,170 L500,200 L400,170 L300,180 L200,230 L100,190
+            L0,200 z"
+            fill="url(#img2)">
+          </path>
+        </svg>
+      </div>
     </div>
   </body>
 </html>
