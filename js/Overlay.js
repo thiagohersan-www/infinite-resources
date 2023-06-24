@@ -9,18 +9,14 @@ class Overlay {
   static showOverlay() {
     document.getElementById("my-overlay").style.display = "flex";
     setTimeout(() => (document.getElementById("my-overlay").style.opacity = 1), 100);
-
-    // window.removeEventListener('wheel', onScrollDesktop);
-    // window.removeEventListener('touchmove', onScrollMobile);
+    document.body.style.overflow = "hidden";
     window.addEventListener("keyup", Overlay.checkEscKey);
   }
 
   static hideOverlay() {
     document.getElementById("my-overlay").style.opacity = 0;
     setTimeout(() => (document.getElementById("my-overlay").style.display = "none"), 200);
-
-    // window.addEventListener('wheel', onScrollDesktop, { passive: false });
-    // window.addEventListener('touchmove', onScrollMobile, { passive: false });
+    document.body.style.overflow = "initial";
     window.removeEventListener("keyup", Overlay.checkEscKey);
   }
 
