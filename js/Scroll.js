@@ -6,12 +6,11 @@ const AUTO_SCROLL = urlParams.has("autoScroll");
 class Scroll {
   constructor(scene) {
     this.scene = scene;
-    this.layers = Array(Scroll.NSTRIPS_TOTAL);
     this.previousTopIdx = 0;
 
     for (let i = 0; i < Scroll.NSTRIPS_TOTAL; i++) {
-      this.layers[i] = Strip.getMesh(window.innerWidth, Scroll.STRIP_HEIGHT, i);
-      this.scene.addBottom(this.layers[i]);
+      const nLayer = Strip.getLayer(window.innerWidth, Scroll.STRIP_HEIGHT, i);
+      this.scene.addBottom(nLayer);
     }
   }
 
@@ -23,14 +22,14 @@ class Scroll {
     if (topIdx > this.previousTopIdx) {
       for (var i = this.previousTopIdx; i < topIdx; i++) {
         this.scene.removeTop();
-        this.layers[i % Scroll.NSTRIPS_TOTAL] = Strip.getLayer(window.innerWidth, Scroll.STRIP_HEIGHT, i + Scroll.NSTRIPS_TOTAL);
-        this.scene.addBottom(this.layers[i % Scroll.NSTRIPS_TOTAL]);
+        const nLayer = Strip.getLayer(window.innerWidth, Scroll.STRIP_HEIGHT, i + Scroll.NSTRIPS_TOTAL);
+        this.scene.addBottom(nLayer);
       }
     } else if (topIdx < this.previousTopIdx) {
       for (var i = this.previousTopIdx - 1; i > topIdx - 1; i--) {
         this.scene.removeBottom();
-        this.layers[i % Scroll.NSTRIPS_TOTAL] = Strip.getLayer(window.innerWidth, Scroll.STRIP_HEIGHT, i);
-        this.scene.addTop(this.layers[i % Scroll.NSTRIPS_TOTAL]);
+        const nLayer = Strip.getLayer(window.innerWidth, Scroll.STRIP_HEIGHT, i);
+        this.scene.addTop(nLayer);
       }
     }
 

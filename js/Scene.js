@@ -8,7 +8,9 @@ class Scene {
   }
 
   addTop(el) {
-    this.container.prepend(el);
+    // TODO: add element or just add content ??
+    // this.container.prepend(el);
+    return;
   }
 
   removeBottom() {
@@ -16,7 +18,9 @@ class Scene {
   }
 
   removeTop() {
-    this.container.removeChild(this.container.firstChild);
+    // TODO: remove element or just remove content ??
+    // this.container.removeChild(this.container.firstChild);
+    return;
   }
 }
 

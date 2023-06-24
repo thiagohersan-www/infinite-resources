@@ -3,7 +3,7 @@ const AUTO_SCROLL = urlParams.has("autoScroll");
 
 class Strip {
   static fakeEl(i, h) {
-    const el = document.createElement("div");
+    const el = document.createElement("svg");
     el.innerHTML = `${i}`;
     el.classList.add("layer");
     el.style.height = `${h}px`;
