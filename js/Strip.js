@@ -10,15 +10,15 @@ class Strip {
     return el;
   }
 
-  static getTopMesh(width, stripHeight) {
+  static getTopLayer(width, stripHeight) {
     const isHorizontal = window.innerWidth > window.innerHeight;
     // TODO: load mountain image
     return Strip.fakeEl(0, stripHeight);
   }
 
-  static getMesh(width, height, yidx) {
+  static getLayer(width, height, yidx) {
     if (yidx === 0) {
-      return Strip.getTopMesh(width, height);
+      return Strip.getTopLayer(width, height);
     }
 
     const isFullWidth = width * window.devicePixelRatio > Strip.MOBILE_WIDTH;

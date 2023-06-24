@@ -43,15 +43,13 @@ const onScrollCommon = (deltaY) => {
   const mInfoButton = document.getElementById("my-info-button");
 
   const shadowOpacity = 0.5 * (scenePositionY - currentLayersOffsetY) / window.innerHeight;
-  // const infoOpacity = 1.0 - (2 * (scenePositionY - currentLayersOffsetY)) / window.innerHeight;
   const infoOpacity = 1.0 - 4.0 * shadowOpacity;
 
   mShadowDiv.style.opacity = Math.max(0, Math.min(1, shadowOpacity));
   mInfoButton.style.opacity = Math.max(0, Math.min(1, infoOpacity));
   mInfoButton.style.display = infoOpacity <= 0 ? "none" : "block";
 
-  // TODO:
-  // window.mScroll.update(scene.position.y);
+  window.mScroll.update(scenePositionY);
 
   if (AUTO_SCROLL) {
     requestAnimationFrame(() => onScrollCommon(AUTO_SCROLL_SPEED));
