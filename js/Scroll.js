@@ -1,7 +1,7 @@
-import { Strip } from './Strip.js';
+import { Strip } from "./Strip.js";
 
 const urlParams = new URLSearchParams(window.location.search);
-const AUTO_SCROLL = urlParams.has('autoScroll');
+const AUTO_SCROLL = urlParams.has("autoScroll");
 
 class Scroll {
   constructor(scene) {
@@ -16,7 +16,7 @@ class Scroll {
   }
 
   update(topPosition) {
-    const topIdx = Math.max(0, Math.floor(topPosition / Scroll.STRIP_HEIGHT - (Scroll.NSTRIPS_TOTAL / 2)));
+    const topIdx = Math.max(0, Math.floor(topPosition / Scroll.STRIP_HEIGHT - Scroll.NSTRIPS_TOTAL / 2));
 
     if (topIdx == 0 && this.previousTopIdx == 0) return;
 

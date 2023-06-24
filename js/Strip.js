@@ -1,5 +1,5 @@
 const urlParams = new URLSearchParams(window.location.search);
-const AUTO_SCROLL = urlParams.has('autoScroll');
+const AUTO_SCROLL = urlParams.has("autoScroll");
 
 class Strip {
   static fakeEl(i, h) {
@@ -11,7 +11,7 @@ class Strip {
   }
 
   static getTopMesh(width, stripHeight) {
-    const isHorizontal = (window.innerWidth > window.innerHeight);
+    const isHorizontal = window.innerWidth > window.innerHeight;
     // TODO: load mountain image
     return Strip.fakeEl(0, stripHeight);
   }
@@ -21,8 +21,8 @@ class Strip {
       return Strip.getTopMesh(width, height);
     }
 
-    const isFullWidth = (width * window.devicePixelRatio > Strip.MOBILE_WIDTH);
-    const isHorizontal = (window.innerWidth > window.innerHeight) || AUTO_SCROLL;
+    const isFullWidth = width * window.devicePixelRatio > Strip.MOBILE_WIDTH;
+    const isHorizontal = window.innerWidth > window.innerHeight || AUTO_SCROLL;
 
     yidx = yidx - 1;
     const numPointsX = isFullWidth ? Strip.NUM_POINTS_X : 0.5 * Strip.NUM_POINTS_X;
@@ -56,7 +56,7 @@ class Strip {
 }
 
 // Strip.NOISE = new SimplexNoise(new Date());
-// Strip.NOISE = new SimplexNoise('infinitum');
+// Strip.NOISE = new SimplexNoise("infinitum");
 
 Strip.MOBILE_WIDTH = 1090;
 
