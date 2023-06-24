@@ -34,10 +34,11 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 const onScrollCommon = (deltaY) => {
-  // TODO:
-  // scene.position.setY(Math.max(currentLayersOffsetY, scene.position.y + deltaY));
+  const pageOffsetY = window.pageYOffset;
+  window.mScene.updateY(deltaY);
+  // console.log(pageOffsetY, " X ", window.mScene.deltaY);
 
-  const scenePositionY = window.pageYOffset;
+  const scenePositionY = pageOffsetY;
 
   const mShadowDiv = document.getElementById("my-shadow-div");
   const mInfoButton = document.getElementById("my-info-button");
@@ -56,23 +57,23 @@ const onScrollCommon = (deltaY) => {
   }
 };
 
+let touchDownY = null;
+
 const onScrollDesktop = (event) => {
-  // event.preventDefault();
-  const deltaY = event.deltaY;
+  const deltaY = parseInt(event.deltaY / window.devicePixelRatio);
   onScrollCommon(deltaY);
 };
-window.addEventListener("wheel", onScrollDesktop, { passive: false });
 
-// let touchDownY = null;
-// window.addEventListener("touchstart", (event) => {
-//   touchDownY = event.touches[0].clientY;
-// });
-//
-// const onScrollMobile = (event) => {
-//   event.preventDefault();
-//   const deltaY = event.touches[0].clientY - touchDownY;
-//   touchDownY = event.touches[0].clientY;
-//   onScrollCommon(-deltaY);
-// }
-// window.addEventListener("touchmove", onScrollMobile, { passive: false });
-// Overlay.addEvent("touchmove", onScrollMobile);
+const onScrollMobile = (event) => {
+  const deltaY = event.touches[0].clientY - touchDownY;
+  touchDownY = event.touches[0].clientY;
+
+  onScrollCommon(-deltaY);
+  window.touch = event.touches[0];
+}
+
+window.addEventListener("wheel", onScrollDesktop, { passive: false });
+window.addEventListener("touchmove", onScrollMobile, { passive: false });
+window.addEventListener("touchstart", (event) => {
+  touchDownY = event.touches[0].clientY;
+});

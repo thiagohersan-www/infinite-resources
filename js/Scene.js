@@ -1,6 +1,7 @@
 class Scene {
   constructor() {
     this.container = document.getElementById("my-layer-container");
+    this.deltaY = 0;
   }
 
   addBottom(el) {
@@ -21,6 +22,10 @@ class Scene {
     // TODO: remove element or just remove content ??
     // this.container.removeChild(this.container.firstChild);
     return;
+  }
+
+  updateY(y) {
+    this.deltaY = Math.max(0, this.deltaY + y);
   }
 }
 
