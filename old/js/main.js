@@ -178,6 +178,6 @@ if (!AUTO_SCROLL && RUNNING_LOCAL) {
     window.addEventListener('keyup', checkAnimationKeys);
   };
 
-  mCaptureScript.src = './js/ccapture/CCapture.all.min.js';
+  mCaptureScript.src = './old/js/ccapture/CCapture.all.min.js';
   document.head.appendChild(mCaptureScript);
 }
