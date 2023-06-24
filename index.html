@@ -13,7 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="shortcut icon" type="image/x-icon" href="./assets/imgs/favicon.ico">
-    <link rel="stylesheet" href="./old/css/main.css">
+    <link rel="stylesheet" href="./css/main.css">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta property="twitter:domain" content="infinitum.marinagem.com">
@@ -28,7 +28,8 @@
     <meta property="og:description" content="">
     <meta property="og:image" content="https://infinitum.marinagem.com/assets/imgs/cover-1200.jpg">
 
-    <script type="module" src="./old/js/main.js"></script>
+    <script type="module" src="./js/main.js"></script>
+
   </head>
   <body>
     <div id="my-overlay" class="overlay">
@@ -57,29 +58,10 @@
       <div class="info">
         <div id="my-info-button" class="info-button">info</div>
       </div>
+
       <div id="my-shadow-div" class="shadow"></div>
-      <div class="menu">
-        <div class="param-container">
-          <label for="num-layer-per" class="param-label">layers per page</label>
-          <input id="param-num-layer" type="range" min="2" max="16" step="1">
-          <div class="param-value"></div>
-        </div>
-        <div class="param-container">
-          <label for="param-amp" class="param-label">amplitude</label>
-          <input id="param-amp" type="range" min="0.1" max="1.5" step="0.1">
-          <div class="param-value"></div>
-        </div>
-        <div class="param-container">
-          <label for="param-x-scale" class="param-label">x diversity</label>
-          <input id="param-x-scale" class="param-flip" type="range" min="10" max="300" step="10">
-          <div class="param-value"></div>
-        </div>
-        <div class="param-container">
-          <label for="param-y-scale" class="param-label">y diversity</label>
-          <input id="param-y-scale" class="param-flip" type="range" min="5" max="60" step="5">
-          <div class="param-value"></div>
-        </div>
-      </div>
+
+      <div id="my-layer-container" class="layer-container"></div>
     </div>
   </body>
 </html>
