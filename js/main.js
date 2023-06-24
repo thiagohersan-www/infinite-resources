@@ -22,16 +22,14 @@ const setupScene = () => {
   document.getElementById("my-shadow-div").style.height = `${window.innerHeight}px`;
   document.getElementById("my-layer-container").style.paddingTop = `${currentLayersOffsetY}px`;
 };
-window.addEventListener("resize", setupScene);
 
-window.addEventListener("DOMContentLoaded", () => {
+const setup = () => {
   setupScene();
-
   window.mOverlay = new Overlay();
   window.mScene = new Scene();
   window.mScroll = new Scroll(window.mScene);
   onScrollCommon(0);
-});
+};
 
 const onScrollCommon = (deltaY) => {
   const pageOffsetY = window.pageYOffset;
@@ -57,23 +55,24 @@ const onScrollCommon = (deltaY) => {
   }
 };
 
-let touchDownY = null;
-
 const onScrollDesktop = (event) => {
   const deltaY = parseInt(event.deltaY / window.devicePixelRatio);
   onScrollCommon(deltaY);
 };
 
+const onTouchMobile = (event) => {
+  window.touchDownY = event.touches[0].clientY;
+};
+
 const onScrollMobile = (event) => {
-  const deltaY = event.touches[0].clientY - touchDownY;
-  touchDownY = event.touches[0].clientY;
+  const deltaY = event.touches[0].clientY - window.touchDownY;
+  window.touchDownY = event.touches[0].clientY;
 
   onScrollCommon(-deltaY);
-  window.touch = event.touches[0];
-}
+};
 
+window.addEventListener("resize", setupScene);
 window.addEventListener("wheel", onScrollDesktop, { passive: false });
 window.addEventListener("touchmove", onScrollMobile, { passive: false });
-window.addEventListener("touchstart", (event) => {
-  touchDownY = event.touches[0].clientY;
-});
+window.addEventListener("touchstart", onTouchMobile);
+window.addEventListener("DOMContentLoaded", setup);
