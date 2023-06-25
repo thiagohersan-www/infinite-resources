@@ -80,7 +80,7 @@ const onScrollCommon = (deltaY) => {
 
 const onScrollDesktop = (event) => {
   event.preventDefault();
-  const deltaY = event.deltaY;
+  const deltaY = parseInt(event.deltaY / window.devicePixelRatio);
   onScrollCommon(deltaY);
 };
 window.addEventListener('wheel', onScrollDesktop, { passive: false });
