@@ -11,17 +11,18 @@ class Scroll {
       const nLayer = Strip.getLayer(window.innerWidth, Scroll.STRIP_HEIGHT, i);
       this.scene.addBottom(nLayer);
     }
+
+    const bufferLayers = Math.ceil((Scroll.NSTRIPS_TOTAL - Scroll.NSTRIPS_ONSCREEN) / 2);
+    this.topThreshold = -bufferLayers * Scroll.STRIP_HEIGHT;
+    this.bottomThreshold = bufferLayers * Scroll.STRIP_HEIGHT;
   }
 
   update() {
-    if (this.scene.getTopLayerTop() < -0.5 * Scroll.NSTRIPS_TOTAL * Scroll.STRIP_HEIGHT) {
+    if (this.scene.getTopLayerTop() < this.topThreshold) {
       this.scene.removeTop();
       const nLayer = Strip.getLayer(window.innerWidth, Scroll.STRIP_HEIGHT, this.scene.getBottomLayerId() + 1);
       this.scene.addBottom(nLayer);
-    }
-
-    // TODO: take mountain height+margin into account
-    if (this.scene.getBottomLayerBottom() > 1.0 * Scroll.NSTRIPS_TOTAL * Scroll.STRIP_HEIGHT) {
+    } else if (this.scene.getBottomLayerBottom() > this.bottomThreshold) {
       if (this.scene.getTopLayerId() <= 0) return;
       this.scene.removeBottom();
       const nLayer = Strip.getLayer(window.innerWidth, Scroll.STRIP_HEIGHT, this.scene.getTopLayerId() - 1);
@@ -30,8 +31,8 @@ class Scroll {
   }
 }
 
-Scroll.NSTRIPS_TOTAL = AUTO_SCROLL ? 32 : 32;
-Scroll.NSTRIPS_ONSCREEN = AUTO_SCROLL ? 12 : 7;
+Scroll.NSTRIPS_TOTAL = AUTO_SCROLL ? 128 : 64;
+Scroll.NSTRIPS_ONSCREEN = AUTO_SCROLL ? 12 : 8;
 Scroll.STRIP_HEIGHT = window.innerHeight / Scroll.NSTRIPS_ONSCREEN;
 
 export { Scroll };

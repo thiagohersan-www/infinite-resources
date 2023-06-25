@@ -1,7 +1,6 @@
 // TODO:
-// - mobile: check noise peaks. pattern image is wrapping. random reset
-// - fix shadow/menu opacities
-// - fix add-layer-to-top on scroll up
+// - mobile: check noise peaks. pattern image is wrapping
+// - mobile: random reset
 
 import { Overlay } from "./Overlay.js";
 import { Scene } from "./Scene.js";
@@ -55,9 +54,8 @@ const onScrollCommon = () => {
   const mShadowDiv = document.getElementById("my-shadow-div");
   const mInfoButton = document.getElementById("my-info-button");
 
-  // TODO: fix these now that pageYOffset is unreliable
-  const shadowOpacity = 0.5 * (scenePositionY - currentLayersOffsetY) / window.innerHeight;
-  const infoOpacity = 1.0 - 4.0 * shadowOpacity;
+  const shadowOpacity = scenePositionY / window.innerHeight;
+  const infoOpacity = 1.0 - shadowOpacity;
 
   mShadowDiv.style.opacity = Math.max(0, Math.min(1, shadowOpacity));
   mInfoButton.style.opacity = Math.max(0, Math.min(1, infoOpacity));
