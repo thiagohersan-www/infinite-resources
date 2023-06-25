@@ -23,10 +23,6 @@ class Scene {
     // this.container.removeChild(this.container.firstChild);
     return;
   }
-
-  updateY(y) {
-    this.deltaY = Math.max(0, this.deltaY + y);
-  }
 }
 
 export { Scene };

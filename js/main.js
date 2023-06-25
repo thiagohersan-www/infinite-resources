@@ -7,22 +7,25 @@ const urlParams = new URLSearchParams(window.location.search);
 const AUTO_SCROLL = urlParams.has("autoScroll");
 const AUTO_SCROLL_SPEED = parseFloat(urlParams.get("autoScroll")) || 1.0;
 
-// TODO: add this as padding/margin to hide layers
-const LAYERS_Y_OFFSET = () => {
-  return 0;
-  return window.innerHeight / 2.0 - (Scroll.STRIP_HEIGHT + 0.5 * Strip.AMPLITUDE * Scroll.STRIP_HEIGHT);
-};
-
-let currentLayersOffsetY = LAYERS_Y_OFFSET();
+let currentLayersOffsetY = 0;
 let currentHeight = window.innerHeight;
+
+const getLayersOffsetY = () => {
+  const layerContainer = document.getElementById("my-layer-container");
+  if (layerContainer.children.length < 2) return 0;
+
+  const firstLayerTop = layerContainer.children[1].getBoundingClientRect()["top"];
+  return window.innerHeight - (firstLayerTop - 0.5 * Strip.AMPLITUDE * Scroll.STRIP_HEIGHT);
+};
 
 const setupScene = () => {
   if (window.innerHeight < currentHeight) return;
 
   currentHeight = window.innerHeight;
-  currentLayersOffsetY = LAYERS_Y_OFFSET();
-  document.getElementById("my-shadow-div").style.height = `${window.innerHeight}px`;
-  document.getElementById("my-layer-container").style.paddingTop = `${currentLayersOffsetY}px`;
+  document.getElementById("my-shadow-div").style.height = `${currentHeight}px`;
+
+  currentLayersOffsetY = getLayersOffsetY();
+  document.getElementById("my-layer-container").style.marginTop = `${currentLayersOffsetY}px`;
 };
 
 const setup = () => {
@@ -31,14 +34,13 @@ const setup = () => {
   window.mScene = new Scene();
   window.mScroll = new Scroll(window.mScene);
   onScrollCommon(0);
+
+  currentLayersOffsetY = getLayersOffsetY();
+  document.getElementById("my-layer-container").style.marginTop = `${currentLayersOffsetY}px`;
 };
 
-const onScrollCommon = (deltaY) => {
-  const pageOffsetY = window.pageYOffset;
-  window.mScene.updateY(deltaY);
-  // console.log(pageOffsetY, " X ", window.mScene.deltaY);
-
-  const scenePositionY = pageOffsetY;
+const onScrollCommon = () => {
+  const scenePositionY = window.pageYOffset;
 
   const mShadowDiv = document.getElementById("my-shadow-div");
   const mInfoButton = document.getElementById("my-info-button");
@@ -53,13 +55,14 @@ const onScrollCommon = (deltaY) => {
   window.mScroll.update(scenePositionY);
 
   if (AUTO_SCROLL) {
-    requestAnimationFrame(() => onScrollCommon(AUTO_SCROLL_SPEED));
+    window.scrollBy(0, AUTO_SCROLL_SPEED);
+    requestAnimationFrame(() => onScrollCommon());
   }
 };
 
 const onScrollDesktop = (event) => {
   const deltaY = parseInt(event.deltaY / window.devicePixelRatio);
-  onScrollCommon(deltaY);
+  onScrollCommon();
 };
 
 const onTouchMobile = (event) => {
@@ -67,10 +70,9 @@ const onTouchMobile = (event) => {
 };
 
 const onScrollMobile = (event) => {
-  const deltaY = event.touches[0].clientY - window.touchDownY;
+  const deltaY = -(event.touches[0].clientY - window.touchDownY);
   window.touchDownY = event.touches[0].clientY;
-
-  onScrollCommon(-deltaY);
+  onScrollCommon();
 };
 
 window.addEventListener("resize", setupScene);
