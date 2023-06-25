@@ -30,7 +30,7 @@ jobs:
       - name: Deploy MN
         run: |
           echo "infinitum.marinagem.com" > CNAME
-          git add threejs/ assets/ css/ js/ index.html CNAME
+          git add assets/ css/ js/ index.html CNAME
           git commit -m "update site: $GITHUB_SHA_SHORT" &> /dev/null
           git push mn :gh-pages
           git push mn gh-pages
