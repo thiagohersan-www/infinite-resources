@@ -6,13 +6,28 @@ class Scene {
     this.container.style.marginTop = `0px`;
   }
 
+  getTopLayerTop() {
+    return this.container.children[0].getBoundingClientRect()["top"];
+  }
+
+  getTopLayerId() {
+    return parseInt(this.container.children[0].id.replace("mylayer", ""));
+  }
+
+  getBottomLayerBottom() {
+    return this.container.lastChild.getBoundingClientRect()["bottom"];
+  }
+
+  getBottomLayerId() {
+    return parseInt(this.container.lastChild.id.replace("mylayer", ""));
+  }
+
   addBottom(el) {
     this.container.append(el);
   }
 
   addTop(el) {
-    // TODO: add element or just add content ??
-    // this.container.prepend(el);
+    this.container.prepend(el);
     return;
   }
 
@@ -21,8 +36,7 @@ class Scene {
   }
 
   removeTop() {
-    // TODO: remove element or just remove content ??
-    // this.container.removeChild(this.container.firstChild);
+    this.container.removeChild(this.container.firstChild);
     return;
   }
 }

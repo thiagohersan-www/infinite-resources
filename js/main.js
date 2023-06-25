@@ -1,6 +1,7 @@
 // TODO:
-// - memory management
-// - mobile: check noise peaks. pattern image is wrapping
+// - mobile: check noise peaks. pattern image is wrapping. random reset
+// - fix shadow/menu opacities
+// - fix add-layer-to-top on scroll up
 
 import { Overlay } from "./Overlay.js";
 import { Scene } from "./Scene.js";
@@ -54,6 +55,7 @@ const onScrollCommon = () => {
   const mShadowDiv = document.getElementById("my-shadow-div");
   const mInfoButton = document.getElementById("my-info-button");
 
+  // TODO: fix these now that pageYOffset is unreliable
   const shadowOpacity = 0.5 * (scenePositionY - currentLayersOffsetY) / window.innerHeight;
   const infoOpacity = 1.0 - 4.0 * shadowOpacity;
 
@@ -61,7 +63,7 @@ const onScrollCommon = () => {
   mInfoButton.style.opacity = Math.max(0, Math.min(1, infoOpacity));
   mInfoButton.style.display = infoOpacity <= 0 ? "none" : "block";
 
-  window.mScroll.update(scenePositionY);
+  window.mScroll.update();
 
   if (AUTO_SCROLL) {
     window.scrollBy(0, AUTO_SCROLL_SPEED);
@@ -69,18 +71,11 @@ const onScrollCommon = () => {
   }
 };
 
-const onScrollDesktop = (event) => {
-  const deltaY = parseInt(event.deltaY / window.devicePixelRatio);
+const onScrollDesktop = (_) => {
   onScrollCommon();
 };
 
-const onTouchMobile = (event) => {
-  window.touchDownY = event.touches[0].clientY;
-};
-
-const onScrollMobile = (event) => {
-  const deltaY = -(event.touches[0].clientY - window.touchDownY);
-  window.touchDownY = event.touches[0].clientY;
+const onScrollMobile = (_) => {
   onScrollCommon();
 };
 
@@ -90,4 +85,3 @@ window.addEventListener("beforeunload", unLoad);
 
 window.addEventListener("wheel", onScrollDesktop, { passive: false });
 window.addEventListener("touchmove", onScrollMobile, { passive: false });
-window.addEventListener("touchstart", onTouchMobile);

@@ -6,7 +6,6 @@ const AUTO_SCROLL = urlParams.has("autoScroll");
 class Scroll {
   constructor(scene) {
     this.scene = scene;
-    this.previousTopIdx = 0;
 
     for (let i = 0; i < Scroll.NSTRIPS_TOTAL; i++) {
       const nLayer = Strip.getLayer(window.innerWidth, Scroll.STRIP_HEIGHT, i);
@@ -14,26 +13,20 @@ class Scroll {
     }
   }
 
-  update(topPosition) {
-    const topIdx = Math.max(0, Math.floor(topPosition / Scroll.STRIP_HEIGHT - Scroll.NSTRIPS_TOTAL / 2));
-
-    if (topIdx == 0 && this.previousTopIdx == 0) return;
-
-    if (topIdx > this.previousTopIdx) {
-      for (var i = this.previousTopIdx; i < topIdx; i++) {
-        this.scene.removeTop();
-        const nLayer = Strip.getLayer(window.innerWidth, Scroll.STRIP_HEIGHT, i + Scroll.NSTRIPS_TOTAL);
-        this.scene.addBottom(nLayer);
-      }
-    } else if (topIdx < this.previousTopIdx) {
-      for (var i = this.previousTopIdx - 1; i > topIdx - 1; i--) {
-        this.scene.removeBottom();
-        const nLayer = Strip.getLayer(window.innerWidth, Scroll.STRIP_HEIGHT, i);
-        this.scene.addTop(nLayer);
-      }
+  update() {
+    if (this.scene.getTopLayerTop() < -0.5 * Scroll.NSTRIPS_TOTAL * Scroll.STRIP_HEIGHT) {
+      this.scene.removeTop();
+      const nLayer = Strip.getLayer(window.innerWidth, Scroll.STRIP_HEIGHT, this.scene.getBottomLayerId() + 1);
+      this.scene.addBottom(nLayer);
     }
 
-    this.previousTopIdx = topIdx;
+    // TODO: take mountain height+margin into account
+    if (this.scene.getBottomLayerBottom() > 1.0 * Scroll.NSTRIPS_TOTAL * Scroll.STRIP_HEIGHT) {
+      if (this.scene.getTopLayerId() <= 0) return;
+      this.scene.removeBottom();
+      const nLayer = Strip.getLayer(window.innerWidth, Scroll.STRIP_HEIGHT, this.scene.getTopLayerId() - 1);
+      this.scene.addTop(nLayer);
+    }
   }
 }
 
