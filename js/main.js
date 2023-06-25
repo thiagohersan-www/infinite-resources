@@ -9,6 +9,7 @@ const AUTO_SCROLL_SPEED = parseFloat(urlParams.get("autoScroll")) || 1.0;
 
 let currentLayersOffsetY = 0;
 let currentHeight = window.innerHeight;
+let currentWidth = window.innerWidth;
 
 const getLayersOffsetY = () => {
   const layerContainer = document.getElementById("my-layer-container");
@@ -18,25 +19,29 @@ const getLayersOffsetY = () => {
   return window.innerHeight - (firstLayerTop - 0.5 * Strip.AMPLITUDE * Scroll.STRIP_HEIGHT);
 };
 
+const setupInitial = () => {
+  window.mOverlay = new Overlay();
+  setupScene();
+};
+
 const setupScene = () => {
-  if (window.innerHeight < currentHeight) return;
+  if (window.innerHeight < currentHeight && window.innerWidth === currentWidth) return;
+
+  window.mScene = new Scene();
+  window.mScroll = new Scroll(window.mScene);
 
   currentHeight = window.innerHeight;
+  currentWidth = window.innerWidth;
   document.getElementById("my-shadow-div").style.height = `${currentHeight}px`;
 
   currentLayersOffsetY = getLayersOffsetY();
   document.getElementById("my-layer-container").style.marginTop = `${currentLayersOffsetY}px`;
+  onScrollCommon();
 };
 
-const setup = () => {
-  setupScene();
-  window.mOverlay = new Overlay();
-  window.mScene = new Scene();
-  window.mScroll = new Scroll(window.mScene);
-  onScrollCommon(0);
-
-  currentLayersOffsetY = getLayersOffsetY();
-  document.getElementById("my-layer-container").style.marginTop = `${currentLayersOffsetY}px`;
+const unLoad = () => {
+  document.getElementById("my-container").innerHTML = "";
+  window.scrollTo(0, 0);
 };
 
 const onScrollCommon = () => {
@@ -75,8 +80,10 @@ const onScrollMobile = (event) => {
   onScrollCommon();
 };
 
+window.addEventListener("DOMContentLoaded", setupInitial);
 window.addEventListener("resize", setupScene);
+window.addEventListener("beforeunload", unLoad);
+
 window.addEventListener("wheel", onScrollDesktop, { passive: false });
 window.addEventListener("touchmove", onScrollMobile, { passive: false });
 window.addEventListener("touchstart", onTouchMobile);
-window.addEventListener("DOMContentLoaded", setup);

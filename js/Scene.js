@@ -1,7 +1,9 @@
 class Scene {
   constructor() {
+    window.scrollTo(0, 0);
     this.container = document.getElementById("my-layer-container");
-    this.deltaY = 0;
+    this.container.innerHTML = "";
+    this.container.style.marginTop = `0px`;
   }
 
   addBottom(el) {
