@@ -12,12 +12,22 @@ const AUTO_SCROLL = urlParams.has("autoScroll");
 class Strip {
   static createSvgElement(i, width, svgH, imgH, imgFile) {
     const offsetY = (imgH - svgH) / 2;
+    const marginTop = i === 1 ? 0.5 * Strip.AMPLITUDE * svgH : 0;
+
     const el = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     el.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
+
     el.id = `mylayer${i}`;
     el.classList.add("layer");
     el.style.height = `${svgH}px`;
-    el.innerHTML = `<defs><pattern id="img${i}" patternUnits="userSpaceOnUse" width="${width}px" height="${imgH}px" x="0" y="-${offsetY}"><image href="${imgFile}" x="0" y="0" width="${width}px" height="${imgH}px" /></pattern></defs>`;
+    el.style.marginTop = `${-marginTop}px`;
+
+    el.innerHTML = `
+    <defs>
+      <pattern id="img${i}" patternUnits="userSpaceOnUse" width="${width}px" height="${imgH}px" x="0" y="-${offsetY}">
+        <image href="${imgFile}" x="0" y="0" width="${width}px" height="${imgH}px" />
+      </pattern>
+    </defs>`;
     return el;
   }
 
