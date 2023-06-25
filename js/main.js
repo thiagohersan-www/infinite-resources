@@ -1,3 +1,7 @@
+// TODO:
+// - memory management
+// - mobile: check noise peaks. pattern image is wrapping
+
 import { Overlay } from "./Overlay.js";
 import { Scene } from "./Scene.js";
 import { Scroll } from "./Scroll.js";
