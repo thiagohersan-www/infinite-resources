@@ -1,6 +1,7 @@
 // TODO:
 // - detect up/down to prevent add/rm layer loop/fight
-// - add more than 1 layer per frame requested
+// - detect scroll to prevent calling update every frame
+// - add more than 1 <svg> per frame
 // - look into opacity logic when removing larger top layer
 // - mobile: check noise peaks. pattern image is wrapping
 // - mobile: random reset
@@ -10,11 +11,12 @@ import { AUTO_SCROLL, AUTO_SCROLL_SPEED } from "./AutoScroll.js";
 import { Scene } from "./Scene.js";
 import { Scroll } from "./Scroll.js";
 
-let previousHeight = window.innerHeight;
-let previousWidth = window.innerWidth;
+let previousHeight = null;
+let previousWidth = null;
 
 const setup = () => {
-  if (window.innerHeight < previousHeight && window.innerWidth === previousWidth) return;
+  if (window.innerHeight !== previousHeight) Scene.resizeShadow();
+  if (window.innerWidth === previousWidth) return;
 
   previousHeight = window.innerHeight;
   previousWidth = window.innerWidth;

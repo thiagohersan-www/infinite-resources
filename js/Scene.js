@@ -5,9 +5,12 @@ class Scene {
 
   static setup() {
     window.scrollTo(0, 0);
-    Scene.shadow.style.height = `${window.innerHeight}px`;
     Scene.layers.innerHTML = "";
     Scene.layers.style.marginTop = "0px";
+  }
+
+  static resizeShadow() {
+    Scene.shadow.style.height = `${window.innerHeight}px`;
   }
 
   static setLayersMarginTop(maxNoiseHeight) {
