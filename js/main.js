@@ -1,4 +1,7 @@
 // TODO:
+// - detect up/down to prevent add/rm layer loop/fight
+// - add more than 1 layer per frame requested
+// - look into opacity logic when removing larger top layer
 // - mobile: check noise peaks. pattern image is wrapping
 // - mobile: random reset
 
@@ -10,7 +13,7 @@ import { Scroll } from "./Scroll.js";
 let previousHeight = window.innerHeight;
 let previousWidth = window.innerWidth;
 
-const setupScene = () => {
+const setup = () => {
   if (window.innerHeight < previousHeight && window.innerWidth === previousWidth) return;
 
   previousHeight = window.innerHeight;
@@ -19,25 +22,20 @@ const setupScene = () => {
   Scene.setup();
   Scroll.setup();
 
-  onScrollCommon();
+  update();
 };
 
-const onScrollCommon = () => {
+const update = () => {
   Scene.update();
   Scroll.update();
 
   if (AUTO_SCROLL) {
     window.scrollBy(0, AUTO_SCROLL_SPEED);
-    requestAnimationFrame(() => onScrollCommon());
   }
+  requestAnimationFrame(() => update());
 };
 
 if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 
-window.addEventListener("DOMContentLoaded", setupScene);
-window.addEventListener("resize", setupScene);
-
-if (!AUTO_SCROLL) {
-  window.addEventListener("wheel", onScrollCommon, { passive: true });
-  window.addEventListener("touchmove", onScrollCommon, { passive: true });
-}
+window.addEventListener("DOMContentLoaded", setup);
+window.addEventListener("resize", setup);
