@@ -1,18 +1,39 @@
-import SimplexNoise from './simplex-noise/simplex-noise.js';
-import { by_rgb } from './by_rgb.js';
-import { by_hls } from './by_hls.js';
-
-const BY_RGB = JSON.parse(by_rgb);
-const BY_HLS = JSON.parse(by_hls);
-const BY_COLOR = BY_RGB.concat(BY_HLS);
-
-const urlParams = new URLSearchParams(window.location.search);
-const AUTO_SCROLL = urlParams.has("autoScroll");
+import SimplexNoise from "./simplex-noise/simplex-noise.js";
+import { by_rgb } from "./by_rgb.js";
+import { by_hls } from "./by_hls.js";
 
 class Strip {
+  // static NOISE = new SimplexNoise(new Date());
+  static NOISE = new SimplexNoise("infinitum");
+  static MOBILE_WIDTH = 1090;
+  static NUM_POINTS_X = 256.0;
+
+  // amp: [0.6, 1.0]
+  static AMPLITUDE = 0.7;
+
+  // y-diversity: [20, 45]
+  static DIVERSITY_Y = 20.0;
+
+  // x-diversity: [160, 200]
+  static DIVERSITY_X = 180.0;
+
+  static DIVERSITY_X_HIGH_FACTOR = 4.0;
+  static DIVERSITY_X_HIGH_AMP = 0.2;
+
+  static BY_COLOR = JSON.parse(by_rgb).concat(JSON.parse(by_hls));
+
+  static createTestElement(i, h) {
+    const el = document.createElement("div");
+    el.id = `mylayer${i}`;
+    el.classList.add("layer");
+    el.style.height = `${h}px`;
+    el.innerHTML = `${i}`;
+    return el;
+  }
+
   static createSvgElement(i, width, svgH, imgH, imgFile) {
     const offsetY = (imgH - svgH) / 2;
-    const marginTop = i === 1 ? 0.5 * Strip.AMPLITUDE * svgH : 0;
+    const marginTop = i === 1 ? 0.5 * svgH * Strip.AMPLITUDE : 0;
 
     const el = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     el.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
@@ -31,7 +52,7 @@ class Strip {
     return el;
   }
 
-  static getTopLayer(width) {
+  static makeTopLayer(width) {
     const isHorizontal = window.innerWidth > window.innerHeight;
     const imgFile = `assets/imgs/map00-${isHorizontal ? "horizontal" : "vertical"}.jpg`;
     const imgWidth = isHorizontal ? 1920.0 : 1080.0;
@@ -46,13 +67,14 @@ class Strip {
     return el;
   }
 
-  static getLayer(width, height, yidx) {
+  static makeLayer(width, height, yidx) {
     if (yidx === 0) {
-      return Strip.getTopLayer(width);
+      return Strip.makeTopLayer(width);
     }
+    // return Strip.createTestElement(yidx, height);
 
     const isFullWidth = width * window.devicePixelRatio > Strip.MOBILE_WIDTH;
-    const isHorizontal = window.innerWidth > window.innerHeight || AUTO_SCROLL;
+    const isHorizontal = window.innerWidth > window.innerHeight;
 
     const yidx0 = yidx - 1;
     const numPointsX = isFullWidth ? Strip.NUM_POINTS_X : 0.5 * Strip.NUM_POINTS_X;
@@ -65,7 +87,7 @@ class Strip {
       const y_noise = Strip.NOISE.noise2D(x / diversityX, yidx0 / Strip.DIVERSITY_Y);
       const y_noise_h = Strip.NOISE.noise2D(Strip.DIVERSITY_X_HIGH_FACTOR * x / diversityX, yidx0 / Strip.DIVERSITY_Y);
 
-      const firstLayerDamp = (yidx0 === 0) ? 0.5 : 1.0;
+      const firstLayerDamp = yidx0 === 0 ? 0.5 : 1.0;
       const y = firstLayerDamp * height * Strip.AMPLITUDE * (y_noise + Strip.DIVERSITY_X_HIGH_AMP * y_noise_h);
       pathString += ` L${x},${y}`;
     }
@@ -80,7 +102,7 @@ class Strip {
     }
     pathString += ` L0,${height} z`;
 
-    const imgFile = `assets/textures/${isFullWidth ? '1920' : '1024'}/${BY_COLOR[yidx0 % BY_COLOR.length]}.jpg`
+    const imgFile = `assets/textures/${isFullWidth ? "1920" : "1024"}/${Strip.BY_COLOR[yidx0 % Strip.BY_COLOR.length]}.jpg`;
     const imgWidth = isFullWidth ? 1920.0 : 1024.0;
     const imgHeight = isFullWidth ? 640.0 : 342.0;
     const aspectRatio = imgWidth / imgHeight;
@@ -92,24 +114,5 @@ class Strip {
     return el;
   }
 }
-
-// Strip.NOISE = new SimplexNoise(new Date());
-Strip.NOISE = new SimplexNoise("infinitum");
-
-Strip.MOBILE_WIDTH = 1090;
-
-Strip.NUM_POINTS_X = 256.0;
-
-// amp: 0.6 - (1.0)
-Strip.AMPLITUDE = 0.7;
-
-// x-diversity: 200 - (160)
-Strip.DIVERSITY_X = 180.0;
-
-Strip.DIVERSITY_X_HIGH_FACTOR = 4.0;
-Strip.DIVERSITY_X_HIGH_AMP = 0.2;
-
-// y-diversity: 45 - (20)
-Strip.DIVERSITY_Y = 20.0;
 
 export { Strip };
