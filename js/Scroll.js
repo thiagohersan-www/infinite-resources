@@ -25,15 +25,21 @@ class Scroll {
     const up = (Scroll.prevOffsetY - window.pageYOffset > Scroll.SCROLL_BUFFER_PIXELS);
     if (!down && !up) return;
 
-    if (down && Scene.getTopLayerTop() < -Scroll.BUFFER_PIXELS) {
-      Scene.removeTop();
-      const nLayer = Strip.makeLayer(Scroll.STRIP_HEIGHT, Scene.getBottomLayerId() + 1);
-      Scene.addBottom(nLayer);
-    } else if (up && Scene.getBottomLayerBottom() > Scroll.BUFFER_PIXELS) {
+    if (down) {
+      const toAdd = Math.floor((-Scroll.BUFFER_PIXELS - Scene.getTopLayerTop()) / Scroll.STRIP_HEIGHT);
+      for (let i = 0; i < toAdd; i++) {
+        Scene.removeTop();
+        const nLayer = Strip.makeLayer(Scroll.STRIP_HEIGHT, Scene.getBottomLayerId() + 1);
+        Scene.addBottom(nLayer);
+      }
+    } else if (up) {
       if (Scene.getTopLayerId() <= 0) return;
-      Scene.removeBottom();
-      const nLayer = Strip.makeLayer(Scroll.STRIP_HEIGHT, Scene.getTopLayerId() - 1);
-      Scene.addTop(nLayer);
+      const toAdd = Math.floor((Scene.getBottomLayerBottom() - Scroll.BUFFER_PIXELS) / Scroll.STRIP_HEIGHT);
+      for (let i = 0; i < toAdd; i++) {
+        Scene.removeBottom();
+        const nLayer = Strip.makeLayer(Scroll.STRIP_HEIGHT, Scene.getTopLayerId() - 1);
+        Scene.addTop(nLayer);
+      }
     }
 
     Scroll.prevOffsetY = window.pageYOffset;
