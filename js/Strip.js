@@ -22,6 +22,8 @@ class Strip {
 
   static BY_COLOR = JSON.parse(by_rgb).concat(JSON.parse(by_hls));
 
+  static HORIZONTAL = window.innerWidth > window.innerHeight;
+
   static createTestElement(i, h) {
     const el = document.createElement("div");
     el.id = `mylayer${i}`;
@@ -53,10 +55,9 @@ class Strip {
   }
 
   static makeTopLayer(width) {
-    const isHorizontal = window.innerWidth > window.innerHeight;
-    const imgFile = `assets/imgs/map00-${isHorizontal ? "horizontal" : "vertical"}.jpg`;
-    const imgWidth = isHorizontal ? 1920.0 : 1080.0;
-    const imgHeight = isHorizontal ? 1300.0 : 2160.0;
+    const imgFile = `assets/imgs/map00-${Strip.HORIZONTAL ? "horizontal" : "vertical"}.jpg`;
+    const imgWidth = Strip.HORIZONTAL ? 1920.0 : 1080.0;
+    const imgHeight = Strip.HORIZONTAL ? 1300.0 : 2160.0;
     const aspectRatio = imgWidth / imgHeight;
     const height = width / aspectRatio;
 
@@ -67,47 +68,47 @@ class Strip {
     return el;
   }
 
-  static makeLayer(width, height, yidx) {
+  static makeLayer(height, yidx) {
+    const width = window.innerWidth;
     if (yidx === 0) {
       return Strip.makeTopLayer(width);
     }
     // return Strip.createTestElement(yidx, height);
 
     const isFullWidth = width * window.devicePixelRatio > Strip.MOBILE_WIDTH;
-    const isHorizontal = window.innerWidth > window.innerHeight;
 
-    const yidx0 = yidx - 1;
     const numPointsX = isFullWidth ? Strip.NUM_POINTS_X : 0.5 * Strip.NUM_POINTS_X;
-    const diversityX = isHorizontal ? Strip.DIVERSITY_X : 0.5 * Strip.DIVERSITY_X;
+    const diversityX = Strip.HORIZONTAL ? Strip.DIVERSITY_X : 0.5 * Strip.DIVERSITY_X;
     const deltaX = width / numPointsX;
 
     let pathString = `M0,${height}`;
     for (let i = 0; i <= numPointsX; i++) {
       const x = i * deltaX;
-      const y_noise = Strip.NOISE.noise2D(x / diversityX, yidx0 / Strip.DIVERSITY_Y);
-      const y_noise_h = Strip.NOISE.noise2D(Strip.DIVERSITY_X_HIGH_FACTOR * x / diversityX, yidx0 / Strip.DIVERSITY_Y);
+      const y_noise = Strip.NOISE.noise2D(x / diversityX, yidx / Strip.DIVERSITY_Y);
+      const y_noise_h = Strip.NOISE.noise2D(Strip.DIVERSITY_X_HIGH_FACTOR * x / diversityX, yidx / Strip.DIVERSITY_Y);
 
-      const firstLayerDamp = yidx0 === 0 ? 0.5 : 1.0;
+      const firstLayerDamp = yidx === 1 ? 0.5 : 1.0;
       const y = firstLayerDamp * height * Strip.AMPLITUDE * (y_noise + Strip.DIVERSITY_X_HIGH_AMP * y_noise_h);
       pathString += ` L${x},${y}`;
     }
 
     for (let i = 0; i <= numPointsX; i++) {
       const x = width - i * deltaX;
-      const y_noise = Strip.NOISE.noise2D(x / diversityX, (yidx0 + 1) / Strip.DIVERSITY_Y);
-      const y_noise_h = Strip.NOISE.noise2D(Strip.DIVERSITY_X_HIGH_FACTOR * x / diversityX, (yidx0 + 1) / Strip.DIVERSITY_Y);
+      const y_noise = Strip.NOISE.noise2D(x / diversityX, (yidx + 1) / Strip.DIVERSITY_Y);
+      const y_noise_h = Strip.NOISE.noise2D(Strip.DIVERSITY_X_HIGH_FACTOR * x / diversityX, (yidx + 1) / Strip.DIVERSITY_Y);
 
       const y = height * Strip.AMPLITUDE * (y_noise + Strip.DIVERSITY_X_HIGH_AMP * y_noise_h);
       pathString += ` L${x},${height + y}`;
     }
     pathString += ` L0,${height} z`;
 
-    const imgFile = `assets/textures/${isFullWidth ? "1920" : "1024"}/${Strip.BY_COLOR[yidx0 % Strip.BY_COLOR.length]}.jpg`;
+    const imgFile = `assets/textures/${isFullWidth ? "1920" : "1024"}/${Strip.BY_COLOR[yidx % Strip.BY_COLOR.length]}.jpg`;
     const imgWidth = isFullWidth ? 1920.0 : 1024.0;
     const imgHeight = isFullWidth ? 640.0 : 342.0;
     const aspectRatio = imgWidth / imgHeight;
+    const imgDisplayHeight = width / aspectRatio;
 
-    const el = Strip.createSvgElement(yidx, width, height, width / aspectRatio, imgFile);
+    const el = Strip.createSvgElement(yidx, width, height, imgDisplayHeight, imgFile);
     const elPath = `<path d="${pathString}" fill="url(#img${yidx})"></path>`;
     el.innerHTML = el.innerHTML + " " + elPath;
 
