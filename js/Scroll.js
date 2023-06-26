@@ -23,7 +23,7 @@ class Scroll {
       Scene.removeTop();
       const nLayer = Strip.makeLayer(window.innerWidth, Scroll.STRIP_HEIGHT, Scene.getBottomLayerId() + 1);
       Scene.addBottom(nLayer);
-    } else if (Scene.getBottomLayerBottom() > Scroll.BUFFER_PIXELS) {
+    } else if (!AUTO_SCROLL && Scene.getBottomLayerBottom() > Scroll.BUFFER_PIXELS) {
       if (Scene.getTopLayerId() <= 0) return;
       Scene.removeBottom();
       const nLayer = Strip.makeLayer(window.innerWidth, Scroll.STRIP_HEIGHT, Scene.getTopLayerId() - 1);
