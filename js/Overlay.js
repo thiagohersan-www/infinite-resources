@@ -1,5 +1,5 @@
 class Overlay {
-  constructor() {
+  static {
     document.getElementById("hide-overlay-button").addEventListener("click", Overlay.hideOverlay);
     document.getElementById("my-popup").addEventListener("click", (e) => e.stopPropagation());
     document.getElementById("my-overlay").addEventListener("click", Overlay.hideOverlay);
