@@ -22,7 +22,7 @@ class Scene {
 
     Scene.shadow.style.opacity = Math.max(0, Math.min(1, shadowOpacity));
     Scene.info.style.opacity = Math.max(0, Math.min(1, infoOpacity));
-    Scene.info.style.display = infoOpacity === 0 ? "none" : "block";
+    Scene.info.style.display = infoOpacity <= 0 ? "none" : "block";
   }
 
   static getTopLayerTop() {
