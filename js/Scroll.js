@@ -1,38 +1,35 @@
+import { AUTO_SCROLL } from "./AutoScroll.js";
+import { Scene } from "./Scene.js";
 import { Strip } from "./Strip.js";
 
-const urlParams = new URLSearchParams(window.location.search);
-const AUTO_SCROLL = urlParams.has("autoScroll");
-
 class Scroll {
-  constructor(scene) {
-    this.scene = scene;
+  static STRIPS_TOTAL = 64;
+  static STRIPS_ONSCREEN = AUTO_SCROLL ? 12 : 8;
+  static STRIP_HEIGHT = window.innerHeight / Scroll.STRIPS_ONSCREEN;
+  static MAX_NOISE_HEIGHT = Strip.AMPLITUDE * Scroll.STRIP_HEIGHT;
+  static BUFFER_LAYERS = Math.ceil((Scroll.STRIPS_TOTAL - Scroll.STRIPS_ONSCREEN) / 2.0);
+  static BUFFER_PIXELS = Scroll.BUFFER_LAYERS * Scroll.STRIP_HEIGHT;
 
-    for (let i = 0; i < Scroll.NSTRIPS_TOTAL; i++) {
-      const nLayer = Strip.getLayer(window.innerWidth, Scroll.STRIP_HEIGHT, i);
-      this.scene.addBottom(nLayer);
+  static setup() {
+    for (let i = 0; i < Scroll.STRIPS_TOTAL; i++) {
+      const nLayer = Strip.makeLayer(window.innerWidth, Scroll.STRIP_HEIGHT, i);
+      Scene.addBottom(nLayer);
     }
-
-    const bufferLayers = Math.ceil((Scroll.NSTRIPS_TOTAL - Scroll.NSTRIPS_ONSCREEN) / 2);
-    this.topThreshold = -bufferLayers * Scroll.STRIP_HEIGHT;
-    this.bottomThreshold = bufferLayers * Scroll.STRIP_HEIGHT;
+    Scene.setLayersMarginTop(Scroll.MAX_NOISE_HEIGHT);
   }
 
-  update() {
-    if (this.scene.getTopLayerTop() < this.topThreshold) {
-      this.scene.removeTop();
-      const nLayer = Strip.getLayer(window.innerWidth, Scroll.STRIP_HEIGHT, this.scene.getBottomLayerId() + 1);
-      this.scene.addBottom(nLayer);
-    } else if (this.scene.getBottomLayerBottom() > this.bottomThreshold) {
-      if (this.scene.getTopLayerId() <= 0) return;
-      this.scene.removeBottom();
-      const nLayer = Strip.getLayer(window.innerWidth, Scroll.STRIP_HEIGHT, this.scene.getTopLayerId() - 1);
-      this.scene.addTop(nLayer);
+  static update() {
+    if (Scene.getTopLayerTop() < -Scroll.BUFFER_PIXELS) {
+      Scene.removeTop();
+      const nLayer = Strip.makeLayer(window.innerWidth, Scroll.STRIP_HEIGHT, Scene.getBottomLayerId() + 1);
+      Scene.addBottom(nLayer);
+    } else if (Scene.getBottomLayerBottom() > Scroll.BUFFER_PIXELS) {
+      if (Scene.getTopLayerId() <= 0) return;
+      Scene.removeBottom();
+      const nLayer = Strip.makeLayer(window.innerWidth, Scroll.STRIP_HEIGHT, Scene.getTopLayerId() - 1);
+      Scene.addTop(nLayer);
     }
   }
 }
-
-Scroll.NSTRIPS_TOTAL = AUTO_SCROLL ? 128 : 64;
-Scroll.NSTRIPS_ONSCREEN = AUTO_SCROLL ? 12 : 8;
-Scroll.STRIP_HEIGHT = window.innerHeight / Scroll.NSTRIPS_ONSCREEN;
 
 export { Scroll };
