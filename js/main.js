@@ -2,66 +2,29 @@
 // - mobile: check noise peaks. pattern image is wrapping
 // - mobile: random reset
 
-import { Overlay } from "./Overlay.js";
+import "./Overlay.js";
+import { AUTO_SCROLL, AUTO_SCROLL_SPEED } from "./AutoScroll.js";
 import { Scene } from "./Scene.js";
 import { Scroll } from "./Scroll.js";
-import { Strip } from "./Strip.js";
 
-const urlParams = new URLSearchParams(window.location.search);
-const AUTO_SCROLL = urlParams.has("autoScroll");
-const AUTO_SCROLL_SPEED = parseFloat(urlParams.get("autoScroll")) || 1.0;
-
-let currentLayersOffsetY = 0;
-let currentHeight = window.innerHeight;
-let currentWidth = window.innerWidth;
-
-const getLayersOffsetY = () => {
-  const layerContainer = document.getElementById("my-layer-container");
-  if (layerContainer.children.length < 2) return 0;
-
-  const firstLayerTop = layerContainer.children[1].getBoundingClientRect()["top"];
-  return window.innerHeight - (firstLayerTop - 0.5 * Strip.AMPLITUDE * Scroll.STRIP_HEIGHT);
-};
-
-const setupInitial = () => {
-  window.mOverlay = new Overlay();
-  setupScene();
-};
+let previousHeight = window.innerHeight;
+let previousWidth = window.innerWidth;
 
 const setupScene = () => {
-  if (window.innerHeight < currentHeight && window.innerWidth === currentWidth) return;
+  if (window.innerHeight < previousHeight && window.innerWidth === previousWidth) return;
 
-  window.mScene = new Scene();
-  window.mScroll = new Scroll(window.mScene);
+  previousHeight = window.innerHeight;
+  previousWidth = window.innerWidth;
 
-  currentHeight = window.innerHeight;
-  currentWidth = window.innerWidth;
-  document.getElementById("my-shadow-div").style.height = `${currentHeight}px`;
+  Scene.setup();
+  Scroll.setup();
 
-  currentLayersOffsetY = getLayersOffsetY();
-  document.getElementById("my-layer-container").style.marginTop = `${currentLayersOffsetY}px`;
   onScrollCommon();
 };
 
-const unLoad = () => {
-  document.getElementById("my-container").innerHTML = "";
-  window.scrollTo(0, 0);
-};
-
 const onScrollCommon = () => {
-  const scenePositionY = window.pageYOffset;
-
-  const mShadowDiv = document.getElementById("my-shadow-div");
-  const mInfoButton = document.getElementById("my-info-button");
-
-  const shadowOpacity = scenePositionY / window.innerHeight;
-  const infoOpacity = 1.0 - shadowOpacity;
-
-  mShadowDiv.style.opacity = Math.max(0, Math.min(1, shadowOpacity));
-  mInfoButton.style.opacity = Math.max(0, Math.min(1, infoOpacity));
-  mInfoButton.style.display = infoOpacity <= 0 ? "none" : "block";
-
-  window.mScroll.update();
+  Scene.update();
+  Scroll.update();
 
   if (AUTO_SCROLL) {
     window.scrollBy(0, AUTO_SCROLL_SPEED);
@@ -69,17 +32,12 @@ const onScrollCommon = () => {
   }
 };
 
-const onScrollDesktop = (_) => {
-  onScrollCommon();
-};
+if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 
-const onScrollMobile = (_) => {
-  onScrollCommon();
-};
-
-window.addEventListener("DOMContentLoaded", setupInitial);
+window.addEventListener("DOMContentLoaded", setupScene);
 window.addEventListener("resize", setupScene);
-window.addEventListener("beforeunload", unLoad);
 
-window.addEventListener("wheel", onScrollDesktop, { passive: false });
-window.addEventListener("touchmove", onScrollMobile, { passive: false });
+if (!AUTO_SCROLL) {
+  window.addEventListener("wheel", onScrollCommon, { passive: true });
+  window.addEventListener("touchmove", onScrollCommon, { passive: true });
+}
