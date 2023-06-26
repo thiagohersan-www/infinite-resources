@@ -1,43 +1,60 @@
 class Scene {
-  constructor() {
+  static layers = document.getElementById("my-layer-container");
+  static shadow = document.getElementById("my-shadow-div");
+  static info = document.getElementById("my-info-button");
+
+  static setup() {
     window.scrollTo(0, 0);
-    this.container = document.getElementById("my-layer-container");
-    this.container.innerHTML = "";
-    this.container.style.marginTop = `0px`;
+    Scene.shadow.style.height = `${window.innerHeight}px`;
+    Scene.layers.innerHTML = "";
+    Scene.layers.style.marginTop = "0px";
   }
 
-  getTopLayerTop() {
-    return this.container.children[0].getBoundingClientRect()["top"];
+  static setLayersMarginTop(maxNoiseHeight) {
+    const layersTop = Scene.layers.children[1].getBoundingClientRect()["top"];
+    const layersOffsetY = window.innerHeight - (layersTop - 0.5 * maxNoiseHeight);
+    Scene.layers.style.marginTop = `${layersOffsetY}px`;
   }
 
-  getTopLayerId() {
-    return parseInt(this.container.children[0].id.replace("mylayer", ""));
+  static update() {
+    const shadowOpacity = window.pageYOffset / window.innerHeight;
+    const infoOpacity = 1.0 - shadowOpacity;
+
+    Scene.shadow.style.opacity = Math.max(0, Math.min(1, shadowOpacity));
+    Scene.info.style.opacity = Math.max(0, Math.min(1, infoOpacity));
+    Scene.info.style.display = infoOpacity === 0 ? "none" : "block";
   }
 
-  getBottomLayerBottom() {
-    return this.container.lastChild.getBoundingClientRect()["bottom"];
+  static getTopLayerTop() {
+    return Scene.layers.children[0].getBoundingClientRect()["top"];
   }
 
-  getBottomLayerId() {
-    return parseInt(this.container.lastChild.id.replace("mylayer", ""));
+  static getTopLayerId() {
+    return parseInt(Scene.layers.children[0].id.replace("mylayer", ""));
   }
 
-  addBottom(el) {
-    this.container.append(el);
+  static getBottomLayerBottom() {
+    return Scene.layers.lastChild.getBoundingClientRect()["bottom"];
   }
 
-  addTop(el) {
-    this.container.prepend(el);
-    return;
+  static getBottomLayerId() {
+    return parseInt(Scene.layers.lastChild.id.replace("mylayer", ""));
   }
 
-  removeBottom() {
-    this.container.removeChild(this.container.lastChild);
+  static addBottom(el) {
+    Scene.layers.append(el);
   }
 
-  removeTop() {
-    this.container.removeChild(this.container.firstChild);
-    return;
+  static addTop(el) {
+    Scene.layers.prepend(el);
+  }
+
+  static removeBottom() {
+    Scene.layers.removeChild(Scene.layers.lastChild);
+  }
+
+  static removeTop() {
+    Scene.layers.removeChild(Scene.layers.firstChild);
   }
 }
 
