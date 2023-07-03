@@ -55,7 +55,7 @@ class Strip {
   }
 
   static makeTopLayer(width) {
-    const imgFile = `assets/imgs/map00-${Strip.HORIZONTAL ? "horizontal" : "vertical"}.jpg`;
+    const imgFile = `assets/imgs/map-${Strip.HORIZONTAL ? "horizontal" : "vertical"}.webp`;
     const imgWidth = Strip.HORIZONTAL ? 1920.0 : 1080.0;
     const imgHeight = Strip.HORIZONTAL ? 1300.0 : 2160.0;
     const aspectRatio = imgWidth / imgHeight;
