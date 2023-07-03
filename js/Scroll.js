@@ -35,7 +35,7 @@ class Scroll {
     } else if (up) {
       if (Scene.getTopLayerId() <= 0) return;
       const toAdd = Math.floor((Scene.getBottomLayerBottom() - Scroll.BUFFER_PIXELS) / Scroll.STRIP_HEIGHT);
-      for (let i = 0; i < toAdd; i++) {
+      for (let i = 0; i < toAdd && Scene.getTopLayerId() > 0; i++) {
         Scene.removeBottom();
         const nLayer = Strip.makeLayer(Scroll.STRIP_HEIGHT, Scene.getTopLayerId() - 1);
         Scene.addTop(nLayer);
