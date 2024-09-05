@@ -9,7 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      GHTOKEN: ${{ secrets.PUSH_TOKEN }}
+      GHTOKENMN: ${{ secrets.PUSH_TOKEN_MN }}
+      GHTOKENTH: ${{ secrets.PUSH_TOKEN_TH }}
 
     steps:
       - name: Checkout
@@ -19,8 +20,8 @@ jobs:
 
       - name: Setup git
         run: |
-          git remote add mn https://thiagohersan:$GHTOKEN@github.com/marinagem-www/infinitum.marinagem.com.git
-          git remote add th https://thiagohersan:$GHTOKEN@github.com/thiagohersan-www/infinitum.thiagohersan.com.git
+          git remote add mn https://thiagohersan:$GHTOKENMN@github.com/marinagem-www/infinitum.marinagem.com.git
+          git remote add th https://thiagohersan:$GHTOKENTH@github.com/thiagohersan-www/infinitum.thiagohersan.com.git
           git config --local user.name "github-actions"
           git config --local user.email "github-actions@users.noreply.github.com"
           git checkout --orphan gh-pages
