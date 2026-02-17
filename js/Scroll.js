@@ -3,7 +3,7 @@ import { Strip } from "./Strip.js";
 
 class Scroll {
   static STRIPS_TOTAL = 64;
-  static STRIPS_ONSCREEN = (window.innerWidth < window.innerHeight) ? 10 : 8;
+  static STRIPS_ONSCREEN = (window.innerWidth < window.innerHeight) ? 10 : 6; // or 8
   static STRIP_HEIGHT = window.innerHeight / Scroll.STRIPS_ONSCREEN;
   static MAX_NOISE_HEIGHT = Strip.AMPLITUDE * Scroll.STRIP_HEIGHT;
   static BUFFER_LAYERS = Math.ceil((Scroll.STRIPS_TOTAL - Scroll.STRIPS_ONSCREEN) / 2.0);
