@@ -14,11 +14,13 @@ class Strip {
 
   // y-diversity: [20, 45]
   // static DIVERSITY_Y = 20.0;
-  static DIVERSITY_Y = 5.0;
+  // static DIVERSITY_Y = 5.0;
+  static DIVERSITY_Y = 1.0;
 
   // x-diversity: [160, 200]
   // static DIVERSITY_X = 180.0;
-  static DIVERSITY_X = 320.0;
+  // static DIVERSITY_X = 320.0;
+  static DIVERSITY_X = 1320.0;
 
   static DIVERSITY_X_HIGH_FACTOR = 4.0;
   static DIVERSITY_X_HIGH_AMP = 0.2;
